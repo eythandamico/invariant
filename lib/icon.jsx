@@ -65,6 +65,13 @@ import {
   Archive,
   AlertTriangle,
   LayoutDashboard,
+  Square,
+  Circle,
+  Users,
+  BellDot,
+  Mic,
+  Paperclip,
+  SendHorizontal,
 } from 'lucide-react'
 
 const icons = {
@@ -139,6 +146,13 @@ const icons = {
   alert: AlertTriangle,
   dashboard: LayoutDashboard,
   open: ExternalLink,
+  square: Square,
+  circle: Circle,
+  users: Users,
+  'bell-dot': BellDot,
+  mic: Mic,
+  paperclip: Paperclip,
+  send: SendHorizontal,
 }
 
 const sizeClasses = {

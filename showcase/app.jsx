@@ -6,12 +6,19 @@ import { SearchBar } from '../components/search-bar.jsx'
 import { SearchToggle } from '../components/search-toggle.jsx'
 import { TextInput } from '../components/text-input.jsx'
 import { AgentAvatar } from '../components/agent-avatar.jsx'
+import { ProfileAvatar, ProfileAvatarGroup } from '../components/profile-avatar.jsx'
 import { SegmentedControl } from '../components/segmented-control.jsx'
 import { ExpandCard } from '../components/expand-card.jsx'
 import { StepIndicator } from '../components/step-indicator.jsx'
 import { ActionButton } from '../components/action-button.jsx'
 import { ToastProvider, useToast } from '../components/toast.jsx'
 import { SpotlightCard } from '../components/spotlight-card.jsx'
+import { PromptBar } from '../components/prompt-bar.jsx'
+import { MessageBubble } from '../components/message-bubble.jsx'
+import { Button } from '../components/button.jsx'
+import { Toggle } from '../components/toggle.jsx'
+import { Accordion } from '../components/accordion.jsx'
+import { Badge } from '../components/badge.jsx'
 import Icon from '../lib/icon.jsx'
 import { TABS, CHAT_TABS, STARTUPS } from './data.jsx'
 
@@ -36,6 +43,16 @@ const AVATAR_STATES = ['default', 'thinking', 'inactive']
 function useScreens(darkMode, toggleDarkMode) {
   const [avatarState, setAvatarState] = useState('default')
   const [tabDemo, setTabDemo] = useState('all')
+  const [avatarRounded, setAvatarRounded] = useState('xl')
+  const [selectedModel, setSelectedModel] = useState('sonnet')
+  const [btnVariant, setBtnVariant] = useState('primary')
+  const [btnSize, setBtnSize] = useState('default')
+  const [btnIcon, setBtnIcon] = useState('none')
+  const [btnLoading, setBtnLoading] = useState(false)
+  const [btnDisabled, setBtnDisabled] = useState(false)
+  const [avatarAlert, setAvatarAlert] = useState(false)
+  const [avatarView, setAvatarView] = useState('single')
+  const [toggleOn, setToggleOn] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
   const [activeTab, setActiveTab] = useState('home')
   const [chatTab, setChatTab] = useState('home')
@@ -51,7 +68,7 @@ function useScreens(darkMode, toggleDarkMode) {
 
   return [
     {
-      id: 'bottom-nav',
+      group: 'Navigation', id: 'bottom-nav',
       label: 'BottomNav',
       render: () => (
         <ComponentStage>
@@ -110,7 +127,7 @@ function useScreens(darkMode, toggleDarkMode) {
       ),
     },
     {
-      id: 'search',
+      group: 'Inputs', id: 'search',
       label: 'SearchBar',
       render: () => (
         <ComponentStage>
@@ -124,6 +141,117 @@ function useScreens(darkMode, toggleDarkMode) {
             <SearchToggle placeholder="Search anything..." />
           </div>
         </ComponentStage>
+      ),
+    },
+    {
+      id: 'message-bubble',
+      label: 'MessageBubble',
+      render: () => (
+        <ComponentStage>
+          <div className="w-[500px] flex flex-col gap-4">
+            <MessageBubble
+              role="user"
+              content="Can you help me deploy this to production?"
+              avatarUrl="/profile_pic.jpg"
+            />
+            <MessageBubble
+              role="agent"
+              agentName="Nova"
+              content="Sure! I'll run the build pipeline and set up the deployment. Give me a moment to check the configuration."
+            />
+            <MessageBubble
+              role="user"
+              content="Go for it."
+              avatarUrl="/profile_pic.jpg"
+            />
+            <MessageBubble
+              role="agent"
+              agentName="Nova"
+              thinking
+            />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'prompt-bar',
+      label: 'PromptBar',
+      render: () => (
+        <ComponentStage>
+          <div className="w-[600px]">
+            <PromptBar
+              placeholder="Ask anything..."
+              models={[
+                { id: 'sonnet', label: 'Sonnet 4' },
+                { id: 'gpt4o', label: 'GPT-4o' },
+                { id: 'gemini', label: 'Gemini 2.5 Pro' },
+              ]}
+              activeModel={selectedModel}
+              onModelChange={setSelectedModel}
+              onSubmit={(msg) => console.log('Send:', msg)}
+              onUpload={() => console.log('Upload')}
+              onMicPress={() => console.log('Mic')}
+            />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      group: 'Actions', id: 'button',
+      label: 'Button',
+      render: () => (
+        <>
+          <ComponentStage>
+            <Button
+              label="Button"
+              variant={btnVariant}
+              size={btnSize}
+              iconLeft={btnIcon === 'left' || btnIcon === 'both' ? 'plus' : undefined}
+              iconRight={btnIcon === 'right' || btnIcon === 'both' ? 'arrow-right' : undefined}
+              loading={btnLoading}
+              disabled={btnDisabled}
+            />
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+            <SegmentedControl
+              tabs={[
+                { id: 'primary', label: 'Primary' },
+                { id: 'secondary', label: 'Secondary' },
+                { id: 'ghost', label: 'Ghost' },
+                { id: 'danger', label: 'Danger' },
+              ]}
+              activeTab={btnVariant}
+              onTabChange={setBtnVariant}
+            />
+            <SegmentedControl
+              tabs={[
+                { id: 'small', label: 'S' },
+                { id: 'default', label: 'M' },
+                { id: 'large', label: 'L' },
+              ]}
+              activeTab={btnSize}
+              onTabChange={setBtnSize}
+            />
+            <SegmentedControl
+              tabs={[
+                { id: 'none', label: 'No Icon' },
+                { id: 'left', icon: 'arrow-left' },
+                { id: 'right', icon: 'arrow-right' },
+                { id: 'both', label: 'Both' },
+              ]}
+              activeTab={btnIcon}
+              onTabChange={setBtnIcon}
+            />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
+              <span className="text-[13px] text-[var(--inv-muted)]">Loading</span>
+              <Toggle checked={btnLoading} onChange={setBtnLoading} size="small" />
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
+              <span className="text-[13px] text-[var(--inv-muted)]">Disabled</span>
+              <Toggle checked={btnDisabled} onChange={setBtnDisabled} size="small" />
+            </div>
+          </div>
+        </>
       ),
     },
     {
@@ -164,6 +292,58 @@ function useScreens(darkMode, toggleDarkMode) {
       ),
     },
     {
+      group: 'Display', id: 'profile-avatar',
+      label: 'ProfileAvatar',
+      render: () => (
+        <>
+          <ComponentStage>
+            {avatarView === 'single' ? (
+              <ProfileAvatar name="Eythan D'Amico" avatarUrl="/profile_pic.jpg" size={40} rounded={avatarRounded} alert={avatarAlert} />
+            ) : (
+              <ProfileAvatarGroup
+                size={40}
+                rounded={avatarRounded}
+                avatars={[
+                  { name: 'Eythan', avatarUrl: '/profile_pic.jpg' },
+                  { name: 'Sarah', avatarUrl: '/profile_pic.jpg' },
+                  { name: 'James', avatarUrl: '/profile_pic.jpg' },
+                  { name: 'Maria', avatarUrl: '/profile_pic.jpg' },
+                  { name: 'Alex', avatarUrl: '/profile_pic.jpg' },
+                ]}
+              />
+            )}
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+            <SegmentedControl
+              tabs={[
+                { id: 'single', icon: 'user' },
+                { id: 'group', icon: 'users' },
+              ]}
+              activeTab={avatarView}
+              onTabChange={setAvatarView}
+            />
+            <SegmentedControl
+              tabs={[
+                { id: 'xl', icon: 'square' },
+                { id: 'full', icon: 'circle' },
+              ]}
+              activeTab={avatarRounded}
+              onTabChange={setAvatarRounded}
+            />
+            <SegmentedControl
+              tabs={[
+                { id: 'off', icon: 'notification' },
+                { id: 'on', icon: 'bell-dot' },
+              ]}
+              activeTab={avatarAlert ? 'on' : 'off'}
+              onTabChange={(id) => avatarView === 'single' && setAvatarAlert(id === 'on')}
+              className={avatarView === 'group' ? 'opacity-40 pointer-events-none' : ''}
+            />
+          </div>
+        </>
+      ),
+    },
+    {
       id: 'agent-avatar',
       label: 'AgentAvatar',
       render: () => (
@@ -187,7 +367,7 @@ function useScreens(darkMode, toggleDarkMode) {
       ),
     },
     {
-      id: 'segmented-tabs',
+      group: 'Controls', id: 'segmented-tabs',
       label: 'SegmentedControl',
       render: () => (
         <ComponentStage>
@@ -206,7 +386,7 @@ function useScreens(darkMode, toggleDarkMode) {
       ),
     },
     {
-      id: 'morph-card',
+      group: 'Layout', id: 'morph-card',
       label: 'ExpandCard',
       render: () => (
         <ComponentStage>
@@ -276,8 +456,50 @@ function useScreens(darkMode, toggleDarkMode) {
         </ComponentStage>
       ),
     },
-{
-      id: 'toast',
+    {
+      id: 'toggle',
+      label: 'Toggle',
+      render: () => (
+        <ComponentStage>
+          <div className="flex items-center gap-4">
+            <Toggle checked={toggleOn} onChange={setToggleOn} />
+            <Toggle checked={toggleOn} onChange={setToggleOn} size="small" />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'badge',
+      label: 'Badge',
+      render: () => (
+        <ComponentStage>
+          <div className="flex items-center gap-2">
+            <Badge label="Default" />
+            <Badge label="Active" variant="accent" />
+            <Badge label="Online" variant="success" />
+            <Badge label="Pending" variant="warning" />
+            <Badge label="Offline" variant="error" />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'accordion',
+      label: 'Accordion',
+      render: () => (
+        <ComponentStage>
+          <div className="w-[400px]">
+            <Accordion items={[
+              { title: 'What is this?', content: 'A component library for building agent-powered interfaces with copy-paste components and CSS variable theming.' },
+              { title: 'How do I install it?', content: 'Clone the repo, copy the components you need, install lucide-react, and import the theme CSS.' },
+              { title: 'Can I customize it?', content: 'Override any --inv-* CSS variable to change colors, shadows, radii, and typography across all components.' },
+            ]} />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      group: 'Feedback', id: 'toast',
       label: 'Toast',
       render: () => <ToastDemo />,
     },
@@ -332,21 +554,27 @@ export default function App() {
           <Icon name={darkMode ? 'sun' : 'moon'} size={16} />
         </button>
 
-        <nav className="fixed left-0 top-0 bottom-0 w-52 px-4 flex flex-col justify-center gap-1 z-[70]">
-          {screens.map(s => (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => setActiveId(s.id)}
-              className={`text-left px-2 py-1.5 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
-                activeId === s.id
-                  ? 'text-[var(--inv-heading)] font-medium'
-                  : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
-              }`}
-            >
-              {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
-              {s.label}
-            </button>
+        <nav className="fixed left-0 top-0 bottom-0 w-52 px-4 flex flex-col justify-center gap-0.5 z-[70] overflow-y-auto">
+          {screens.map((s, i) => (
+            <div key={s.id}>
+              {s.group && (
+                <div className={`px-2 pt-3 pb-1 text-[11px] uppercase tracking-wider text-[var(--inv-muted)] opacity-50 ${i > 0 ? 'mt-1' : ''}`}>
+                  {s.group}
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => setActiveId(s.id)}
+                className={`w-full text-left px-2 py-1 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
+                  activeId === s.id
+                    ? 'text-[var(--inv-heading)] font-medium'
+                    : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
+                }`}
+              >
+                {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
+                {s.label}
+              </button>
+            </div>
           ))}
         </nav>
       </div>

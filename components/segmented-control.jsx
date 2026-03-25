@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
+import Icon from '../lib/icon.jsx'
 
 export function SegmentedControl({ tabs = [], activeTab, onTabChange, className = '' }) {
   const containerRef = useRef(null)
@@ -29,18 +30,24 @@ export function SegmentedControl({ tabs = [], activeTab, onTabChange, className 
       />
       {tabs.map(tab => {
         const isActive = activeTab === tab.id
+        const hasIcon = !!tab.icon
+        const iconOnly = hasIcon && !tab.label
         return (
           <button
             key={tab.id}
             data-tab-id={tab.id}
             type="button"
             onClick={() => onTabChange?.(tab.id)}
-            className={`relative z-10 px-3 py-1.5 text-[13px] font-medium rounded-lg transition-colors duration-150 cursor-pointer ${
+            className={`relative z-10 flex items-center justify-center gap-1.5 text-[13px] font-medium rounded-lg transition-colors duration-150 cursor-pointer ${
+              iconOnly ? 'w-9 h-9' : 'px-3 py-1.5'
+            } ${
               isActive
                 ? 'text-[var(--inv-heading)]'
                 : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
             }`}
+            aria-label={tab.label || tab.id}
           >
+            {tab.icon && <Icon name={tab.icon} size={16} />}
             {tab.label}
           </button>
         )
