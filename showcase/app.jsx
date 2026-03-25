@@ -9,6 +9,7 @@ import { SegmentedTabs } from '../components/segmented-tabs.jsx'
 import { MorphCard } from '../components/morph-card.jsx'
 import { StepIndicator } from '../components/step-indicator.jsx'
 import { MorphButton } from '../components/morph-button.jsx'
+import { ToastProvider, useToast } from '../components/toast.jsx'
 import Icon from '../lib/icon.jsx'
 import { TABS, CHAT_TABS, STARTUPS } from './data.jsx'
 
@@ -256,7 +257,27 @@ function useScreens(darkMode, toggleDarkMode) {
         </ComponentStage>
       ),
     },
+    {
+      id: 'toast',
+      label: 'Toast',
+      render: () => <ToastDemo />,
+    },
   ]
+}
+
+function ToastDemo() {
+  const { addToast } = useToast()
+  return (
+    <ComponentStage>
+      <button
+        type="button"
+        onClick={() => addToast('Bread alert', { message: 'Something just popped up' })}
+        className="px-4 py-2.5 text-[15px] font-medium rounded-xl bg-[var(--inv-heading)] text-[var(--inv-bg)] cursor-pointer transition-[scale] duration-200 ease-out active:scale-[0.96]"
+      >
+        Show Toast
+      </button>
+    </ComponentStage>
+  )
 }
 
 export default function App() {
@@ -275,39 +296,41 @@ export default function App() {
   const active = screens.find(s => s.id === activeId)
 
   return (
-    <div className="min-h-screen bg-[var(--inv-bg)] text-[var(--inv-heading)]">
-      <div className="min-h-screen flex items-center justify-center">
-        {active?.render()}
+    <ToastProvider>
+      <div className="min-h-screen bg-[var(--inv-bg)] text-[var(--inv-heading)]">
+        <div className="min-h-screen flex items-center justify-center">
+          {active?.render()}
+        </div>
+
+        {/* Dark mode toggle */}
+        <button
+          type="button"
+          onClick={toggleDarkMode}
+          className="fixed top-5 right-5 z-[70] w-9 h-9 flex items-center justify-center rounded-lg bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-colors duration-150 cursor-pointer"
+          style={{ boxShadow: 'var(--inv-shadow)' }}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          <Icon name={darkMode ? 'sun' : 'moon'} size={16} />
+        </button>
+
+        <nav className="fixed left-0 top-0 bottom-0 w-52 px-4 flex flex-col justify-center gap-1 z-[70]">
+          {screens.map(s => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setActiveId(s.id)}
+              className={`text-left px-2 py-1.5 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
+                activeId === s.id
+                  ? 'text-[var(--inv-heading)] font-medium'
+                  : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
+              }`}
+            >
+              {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
+              {s.label}
+            </button>
+          ))}
+        </nav>
       </div>
-
-      {/* Dark mode toggle */}
-      <button
-        type="button"
-        onClick={toggleDarkMode}
-        className="fixed top-5 right-5 z-[70] w-9 h-9 flex items-center justify-center rounded-lg bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-colors duration-150 cursor-pointer"
-        style={{ boxShadow: 'var(--inv-shadow)' }}
-        aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-      >
-        <Icon name={darkMode ? 'sun' : 'moon'} size={16} />
-      </button>
-
-      <nav className="fixed left-0 top-0 bottom-0 w-52 px-4 flex flex-col justify-center gap-1 z-[70]">
-        {screens.map(s => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => setActiveId(s.id)}
-            className={`text-left px-2 py-1.5 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
-              activeId === s.id
-                ? 'text-[var(--inv-heading)] font-medium'
-                : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
-            }`}
-          >
-            {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
-            {s.label}
-          </button>
-        ))}
-      </nav>
-    </div>
+    </ToastProvider>
   )
 }
