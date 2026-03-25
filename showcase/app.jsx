@@ -8,6 +8,7 @@ import { AgentAvatar } from '../components/agent-avatar.jsx'
 import { SegmentedTabs } from '../components/segmented-tabs.jsx'
 import { MorphCard } from '../components/morph-card.jsx'
 import { StepIndicator } from '../components/step-indicator.jsx'
+import { MorphButton } from '../components/morph-button.jsx'
 import Icon from '../lib/icon.jsx'
 import { TABS, CHAT_TABS, STARTUPS } from './data.jsx'
 
@@ -204,14 +205,14 @@ function useScreens(darkMode, toggleDarkMode) {
       render: () => (
         <ComponentStage>
           <div className="w-[400px] flex flex-col gap-3">
-            <MorphCard title="What is Invariant UI?" icon="sparkle">
-              A component library for building agent-powered interfaces. Copy-paste components with CSS variable theming that work in light and dark mode.
+            <MorphCard title="Getting started" icon="home">
+              Everything you need to set up your project and start building. Follow the quick start guide to get running in minutes.
             </MorphCard>
-            <MorphCard title="How does theming work?" icon="settings">
-              All components use --inv-* CSS variables. Override any variable to customize colors, shadows, radii, and typography. Preset themes are available as CSS classes.
+            <MorphCard title="Configuration" icon="settings">
+              Customize your setup with flexible options. Adjust settings to match your workflow and preferences.
             </MorphCard>
-            <MorphCard title="Can I modify components?" icon="edit">
-              Yes. Components are copied into your project — they become your code. Modify anything you want. No dependency lock-in.
+            <MorphCard title="Resources" icon="folder">
+              Guides, examples, and references to help you get the most out of your tools.
             </MorphCard>
           </div>
         </ComponentStage>
@@ -244,6 +245,15 @@ function useScreens(darkMode, toggleDarkMode) {
             </button>
           </div>
         </>
+      ),
+    },
+    {
+      id: 'morph-button',
+      label: 'MorphButton',
+      render: () => (
+        <ComponentStage>
+          <MorphButton label="Save" icon="check" />
+        </ComponentStage>
       ),
     },
   ]
