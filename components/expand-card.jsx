@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Icon from '../lib/icon.jsx'
 
-export function MorphCard({ title, children, icon, defaultExpanded = false, className = '' }) {
+export function ExpandCard({ title, children, icon, defaultExpanded = false, className = '' }) {
   const [expanded, setExpanded] = useState(defaultExpanded)
   const contentRef = useRef(null)
   const [contentHeight, setContentHeight] = useState(0)

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Icon from '../lib/icon.jsx'
 
-export function MorphButton({ label = 'Save', icon, loadingDuration = 2000, onAction, className = '' }) {
+export function ActionButton({ label = 'Save', icon, loadingDuration = 2000, onAction, className = '' }) {
   const [state, setState] = useState('idle')
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import Icon from '../lib/icon.jsx'
 import { popoverStyle, menuShadow } from '../lib/popover.js'
 import { useClickOutside } from '../lib/use-click-outside.js'
 
-export function StartupSwitcher({ currentStartup, startups = [], onStartupChange }) {
+export function WorkspaceSwitcher({ currentStartup, startups = [], onStartupChange }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useClickOutside(menuOpen, () => setMenuOpen(false))

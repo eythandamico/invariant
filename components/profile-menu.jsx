@@ -3,7 +3,7 @@ import Icon from '../lib/icon.jsx'
 import { popoverStyle, menuShadow } from '../lib/popover.js'
 import { useClickOutside } from '../lib/use-click-outside.js'
 
-export function ProfileDropdown({ avatarUrl, profile, profileItems = [] }) {
+export function ProfileMenu({ avatarUrl, profile, profileItems = [] }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useClickOutside(menuOpen, () => setMenuOpen(false))

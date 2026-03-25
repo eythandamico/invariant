@@ -1,6 +1,6 @@
 import Icon from '../lib/icon.jsx'
 
-export function SearchInput({ placeholder = 'Search...', shortcutKey = '⌘K', className = '', onSearch, autoFocus = false }) {
+export function SearchBar({ placeholder = 'Search...', shortcutKey = '⌘K', className = '', onSearch, autoFocus = false }) {
   return (
     <div className={`w-full max-w-4xl rounded-2xl bg-[var(--inv-surface)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--inv-accent)] transition-shadow duration-150 ${className}`} style={{ outline: '1px solid var(--inv-outline)' }}>
       <div className="flex items-center gap-3 px-4 py-3">

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 
-export function SegmentedTabs({ tabs = [], activeTab, onTabChange, className = '' }) {
+export function SegmentedControl({ tabs = [], activeTab, onTabChange, className = '' }) {
   const containerRef = useRef(null)
   const [indicator, setIndicator] = useState({ left: 0, width: 0 })
   const [ready, setReady] = useState(false)

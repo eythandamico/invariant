@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react'
 import { BottomNav } from '../components/bottom-nav.jsx'
-import { StartupSwitcher } from '../components/startup-switcher.jsx'
-import { ProfileDropdown } from '../components/profile-dropdown.jsx'
-import { SearchInput } from '../components/search-input.jsx'
+import { WorkspaceSwitcher } from '../components/workspace-switcher.jsx'
+import { ProfileMenu } from '../components/profile-menu.jsx'
+import { SearchBar } from '../components/search-bar.jsx'
+import { SearchToggle } from '../components/search-toggle.jsx'
 import { TextInput } from '../components/text-input.jsx'
 import { AgentAvatar } from '../components/agent-avatar.jsx'
-import { SegmentedTabs } from '../components/segmented-tabs.jsx'
-import { MorphCard } from '../components/morph-card.jsx'
+import { SegmentedControl } from '../components/segmented-control.jsx'
+import { ExpandCard } from '../components/expand-card.jsx'
 import { StepIndicator } from '../components/step-indicator.jsx'
-import { MorphButton } from '../components/morph-button.jsx'
+import { ActionButton } from '../components/action-button.jsx'
 import { ToastProvider, useToast } from '../components/toast.jsx'
+import { SpotlightCard } from '../components/spotlight-card.jsx'
 import Icon from '../lib/icon.jsx'
 import { TABS, CHAT_TABS, STARTUPS } from './data.jsx'
 
@@ -68,10 +70,10 @@ function useScreens(darkMode, toggleDarkMode) {
     },
     {
       id: 'profile',
-      label: 'ProfileDropdown',
+      label: 'ProfileMenu',
       render: () => (
         <ComponentStage>
-          <ProfileDropdown
+          <ProfileMenu
             avatarUrl="/profile_pic.jpg"
             profile={PROFILE}
             profileItems={PROFILE_ITEMS}
@@ -81,10 +83,10 @@ function useScreens(darkMode, toggleDarkMode) {
     },
     {
       id: 'startup',
-      label: 'StartupSwitcher',
+      label: 'WorkspaceSwitcher',
       render: () => (
         <ComponentStage>
-          <StartupSwitcher
+          <WorkspaceSwitcher
             currentStartup={currentStartup}
             startups={STARTUPS}
             onStartupChange={setCurrentSlug}
@@ -109,14 +111,17 @@ function useScreens(darkMode, toggleDarkMode) {
     },
     {
       id: 'search',
-      label: 'SearchInput',
+      label: 'SearchBar',
       render: () => (
         <ComponentStage>
-          <div className="w-[520px]">
-            <SearchInput
-              placeholder="Search anything..."
-              autoFocus
-            />
+          <div className="flex flex-col items-center gap-8">
+            <div className="w-[520px]">
+              <SearchBar
+                placeholder="Search anything..."
+                autoFocus
+              />
+            </div>
+            <SearchToggle placeholder="Search anything..." />
           </div>
         </ComponentStage>
       ),
@@ -172,7 +177,7 @@ function useScreens(darkMode, toggleDarkMode) {
           </ComponentStage>
 
           <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
-            <SegmentedTabs
+            <SegmentedControl
               tabs={AVATAR_STATES.map(s => ({ id: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
               activeTab={avatarState}
               onTabChange={setAvatarState}
@@ -183,11 +188,11 @@ function useScreens(darkMode, toggleDarkMode) {
     },
     {
       id: 'segmented-tabs',
-      label: 'SegmentedTabs',
+      label: 'SegmentedControl',
       render: () => (
         <ComponentStage>
           <div className="flex flex-col items-center gap-6">
-            <SegmentedTabs
+            <SegmentedControl
               tabs={[
                 { id: 'all', label: 'All' },
                 { id: 'active', label: 'Active' },
@@ -202,19 +207,19 @@ function useScreens(darkMode, toggleDarkMode) {
     },
     {
       id: 'morph-card',
-      label: 'MorphCard',
+      label: 'ExpandCard',
       render: () => (
         <ComponentStage>
           <div className="w-[400px] flex flex-col gap-3">
-            <MorphCard title="Getting started" icon="home">
+            <ExpandCard title="Getting started" icon="home">
               Everything you need to set up your project and start building. Follow the quick start guide to get running in minutes.
-            </MorphCard>
-            <MorphCard title="Configuration" icon="settings">
+            </ExpandCard>
+            <ExpandCard title="Configuration" icon="settings">
               Customize your setup with flexible options. Adjust settings to match your workflow and preferences.
-            </MorphCard>
-            <MorphCard title="Resources" icon="folder">
+            </ExpandCard>
+            <ExpandCard title="Resources" icon="folder">
               Guides, examples, and references to help you get the most out of your tools.
-            </MorphCard>
+            </ExpandCard>
           </div>
         </ComponentStage>
       ),
@@ -250,14 +255,28 @@ function useScreens(darkMode, toggleDarkMode) {
     },
     {
       id: 'morph-button',
-      label: 'MorphButton',
+      label: 'ActionButton',
       render: () => (
         <ComponentStage>
-          <MorphButton label="Save" icon="check" />
+          <ActionButton label="Save" icon="check" />
         </ComponentStage>
       ),
     },
     {
+      id: 'spotlight-card',
+      label: 'SpotlightCard',
+      render: () => (
+        <ComponentStage>
+          <SpotlightCard className="w-[280px]">
+            <div className="p-5">
+              <div className="text-[15px] font-medium text-[var(--inv-heading)] mb-1">Analytics</div>
+              <div className="text-[13px] text-[var(--inv-muted)]">Track performance metrics and user engagement in real time.</div>
+            </div>
+          </SpotlightCard>
+        </ComponentStage>
+      ),
+    },
+{
       id: 'toast',
       label: 'Toast',
       render: () => <ToastDemo />,
