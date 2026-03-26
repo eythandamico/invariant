@@ -288,7 +288,7 @@ export function BottomNav({ tabs = [], activeTab, onTabChange, addItems = [], no
                     type="button"
                     onClick={() => { navigator.vibrate?.(10); onTabChange?.(tab.id); setAddMenuOpen(false) }}
                     onMouseEnter={() => setHoveredIdx(isActive ? null : idx)}
-                    className={`relative z-10 flex items-center justify-center w-11 h-11 rounded-xl cursor-pointer transition-[color,transform] duration-150 ease-out active:scale-95 focus-visible:ring-2 focus-visible:ring-[var(--inv-accent)] focus-visible:ring-offset-1 ${
+                    className={`relative z-10 flex items-center justify-center w-11 h-11 rounded-xl cursor-pointer transition-[color,scale] duration-150 ease-out active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[var(--inv-accent)] focus-visible:ring-offset-1 ${
                       isActive ? 'text-[var(--inv-accent)]' : 'text-[var(--inv-nav-text)] hover:text-[var(--inv-nav-text-active)]'
                     }`}
                     aria-label={`${tab.label}${notifCount > 0 ? ` (${notifCount} new)` : ''}`}

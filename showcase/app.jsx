@@ -15,6 +15,8 @@ import { ToastProvider, useToast } from '../components/toast.jsx'
 import { SpotlightCard } from '../components/spotlight-card.jsx'
 import { PromptBar } from '../components/prompt-bar.jsx'
 import { MessageBubble } from '../components/message-bubble.jsx'
+import { Dropdown } from '../components/dropdown.jsx'
+import { Select } from '../components/select.jsx'
 import { Button } from '../components/button.jsx'
 import { Toggle } from '../components/toggle.jsx'
 import { Accordion } from '../components/accordion.jsx'
@@ -45,6 +47,13 @@ function useScreens(darkMode, toggleDarkMode) {
   const [tabDemo, setTabDemo] = useState('all')
   const [avatarRounded, setAvatarRounded] = useState('xl')
   const [selectedModel, setSelectedModel] = useState('sonnet')
+  const [selectValue, setSelectValue] = useState(null)
+  const [dropdownDir, setDropdownDir] = useState('bottom')
+  const [dropdownAlign, setDropdownAlign] = useState('left')
+  const isHorizontalDrop = dropdownDir === 'left' || dropdownDir === 'right'
+  const [messageState, setMessageState] = useState('default')
+  const [inputState, setInputState] = useState('default')
+  const [inputIcon, setInputIcon] = useState(false)
   const [btnVariant, setBtnVariant] = useState('primary')
   const [btnSize, setBtnSize] = useState('default')
   const [btnIcon, setBtnIcon] = useState('none')
@@ -147,30 +156,47 @@ function useScreens(darkMode, toggleDarkMode) {
       id: 'message-bubble',
       label: 'MessageBubble',
       render: () => (
-        <ComponentStage>
-          <div className="w-[500px] flex flex-col gap-4">
-            <MessageBubble
-              role="user"
-              content="Can you help me deploy this to production?"
-              avatarUrl="/profile_pic.jpg"
-            />
-            <MessageBubble
-              role="agent"
-              agentName="Nova"
-              content="Sure! I'll run the build pipeline and set up the deployment. Give me a moment to check the configuration."
-            />
-            <MessageBubble
-              role="user"
-              content="Go for it."
-              avatarUrl="/profile_pic.jpg"
-            />
-            <MessageBubble
-              role="agent"
-              agentName="Nova"
-              thinking
+        <>
+          <ComponentStage>
+            <div className="w-[500px] flex flex-col gap-4">
+              <MessageBubble
+                role="user"
+                content="Can you help me deploy this to production?"
+                avatarUrl="/profile_pic.jpg"
+                timestamp="2:14 PM"
+              />
+              <MessageBubble
+                role="agent"
+                agentName="Nova"
+                content="Sure! I'll run the build pipeline and set up the deployment. Give me a moment to check the configuration."
+                timestamp="2:14 PM"
+              />
+              <MessageBubble
+                role="user"
+                content="Go for it."
+                avatarUrl="/profile_pic.jpg"
+                timestamp="2:15 PM"
+              />
+              <MessageBubble
+                role="agent"
+                agentName="Nova"
+                content={messageState === 'thinking' ? undefined : "Done! Deployment is live at production.invariant.com"}
+                thinking={messageState === 'thinking'}
+                timestamp="2:15 PM"
+              />
+            </div>
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
+            <SegmentedControl
+              tabs={[
+                { id: 'default', label: 'Default' },
+                { id: 'thinking', label: 'Thinking' },
+              ]}
+              activeTab={messageState}
+              onTabChange={setMessageState}
             />
           </div>
-        </ComponentStage>
+        </>
       ),
     },
     {
@@ -194,6 +220,71 @@ function useScreens(darkMode, toggleDarkMode) {
             />
           </div>
         </ComponentStage>
+      ),
+    },
+    {
+      id: 'select',
+      label: 'Select',
+      render: () => (
+        <ComponentStage>
+          <div className="w-[280px]">
+            <Select
+              label="Model"
+              placeholder="Choose a model..."
+              options={[
+                { id: 'sonnet', label: 'Sonnet 4' },
+                { id: 'opus', label: 'Opus 4' },
+                { id: 'haiku', label: 'Haiku 4' },
+                { id: 'gpt4o', label: 'GPT-4o' },
+                { id: 'gemini', label: 'Gemini 2.5 Pro' },
+              ]}
+              value={selectValue}
+              onChange={setSelectValue}
+            />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'dropdown',
+      label: 'Dropdown',
+      render: () => (
+        <>
+          <ComponentStage>
+            <Dropdown
+              placement={`${dropdownDir}-${dropdownAlign}`}
+              items={[
+                { label: 'Edit', icon: 'edit', onAction: () => console.log('Edit') },
+                { label: 'Duplicate', icon: 'copy', onAction: () => console.log('Duplicate') },
+                { label: 'Share', icon: 'external-link', onAction: () => console.log('Share') },
+                { divider: true },
+                { label: 'Delete', icon: 'close', danger: true, onAction: () => console.log('Delete') },
+              ]}
+            />
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+            <SegmentedControl
+              tabs={[
+                { id: 'top', icon: 'arrow-up' },
+                { id: 'bottom', icon: 'arrow-down' },
+                { id: 'left', icon: 'arrow-left' },
+                { id: 'right', icon: 'arrow-right' },
+              ]}
+              activeTab={dropdownDir}
+              onTabChange={(id) => { setDropdownDir(id); if (id === 'left' || id === 'right') setDropdownAlign('center') }}
+            />
+            <SegmentedControl
+              tabs={[
+                { id: 'left', icon: 'align-left' },
+                { id: 'center', icon: 'align-center' },
+                { id: 'right', icon: 'align-right' },
+              ]}
+              activeTab={isHorizontalDrop ? 'center' : dropdownAlign}
+              onTabChange={(id) => !isHorizontalDrop && setDropdownAlign(id)}
+              className={isHorizontalDrop ? 'opacity-40 pointer-events-none' : ''}
+            />
+          </div>
+        </>
       ),
     },
     {
@@ -268,7 +359,7 @@ function useScreens(darkMode, toggleDarkMode) {
               <button
                 key={btn.icon}
                 type="button"
-                className="w-11 h-11 flex items-center justify-center rounded-xl bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-[color,box-shadow,transform] duration-200 ease-out cursor-pointer active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[var(--inv-accent)] focus-visible:ring-offset-1 [box-shadow:var(--inv-shadow-sm)] hover:[box-shadow:var(--inv-shadow-sm-hover)]"
+                className="w-11 h-11 flex items-center justify-center rounded-xl bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-[color,box-shadow,scale] duration-200 ease-out cursor-pointer active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[var(--inv-accent)] focus-visible:ring-offset-1 [box-shadow:var(--inv-shadow-sm)] hover:[box-shadow:var(--inv-shadow-sm-hover)]"
                 aria-label={btn.label}
               >
                 <Icon name={btn.icon} size={20} />
@@ -282,13 +373,37 @@ function useScreens(darkMode, toggleDarkMode) {
       id: 'text-input',
       label: 'TextInput',
       render: () => (
-        <ComponentStage>
-          <div className="w-[360px] flex flex-col gap-4">
-            <TextInput label="Name" placeholder="Enter your name..." />
-            <TextInput label="Email" placeholder="you@example.com" />
-            <TextInput label="Website" placeholder="https://" error="Invalid URL" />
+        <>
+          <ComponentStage>
+            <div className="w-[360px]">
+              <TextInput
+                label="Email"
+                placeholder="you@example.com"
+                disabled={inputState === 'disabled'}
+                error={inputState === 'error' ? 'Invalid email address' : undefined}
+                autoFocus={inputState === 'focus'}
+                icon={inputIcon ? 'mail' : undefined}
+                key={`${inputState}-${inputIcon}`}
+              />
+            </div>
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+            <SegmentedControl
+              tabs={[
+                { id: 'default', label: 'Default' },
+                { id: 'focus', label: 'Focus' },
+                { id: 'error', label: 'Error' },
+                { id: 'disabled', label: 'Disabled' },
+              ]}
+              activeTab={inputState}
+              onTabChange={setInputState}
+            />
+            <div className="flex items-center gap-2 bg-[var(--inv-surface)] rounded-xl py-[9px] px-3" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
+              <span className="text-[13px] font-medium text-[var(--inv-muted)]">Icon</span>
+              <Toggle checked={inputIcon} onChange={setInputIcon} />
+            </div>
           </div>
-        </ComponentStage>
+        </>
       ),
     },
     {

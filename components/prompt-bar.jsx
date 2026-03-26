@@ -230,7 +230,7 @@ export function PromptBar({
                 setValue('')
               }
             }}
-            className={`w-9 h-9 flex items-center justify-center rounded-full transition-[color,background-color,transform] duration-200 ease-out cursor-pointer active:scale-[0.96] ${
+            className={`w-9 h-9 flex items-center justify-center rounded-full transition-[color,background-color,scale] duration-200 ease-out cursor-pointer active:scale-[0.96] ${
               hasValue
                 ? 'bg-[var(--inv-accent)] text-white'
                 : 'bg-[var(--inv-border)] text-[var(--inv-muted)]'
