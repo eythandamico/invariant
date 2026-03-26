@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { BottomNav } from '../components/bottom-nav.jsx'
 import { WorkspaceSwitcher } from '../components/workspace-switcher.jsx'
 import { ProfileMenu } from '../components/profile-menu.jsx'
@@ -646,8 +646,33 @@ export default function App() {
 
   const screens = useScreens(darkMode, toggleDarkMode)
   const [activeId, setActiveId] = useState(screens[0].id)
+  const [cmdOpen, setCmdOpen] = useState(false)
+  const [cmdQuery, setCmdQuery] = useState('')
+  const cmdInputRef = useRef(null)
 
   useEffect(() => { document.title = 'Components — Invariant UI' }, [])
+
+  // Cmd+K to toggle
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setCmdOpen(prev => !prev)
+        setCmdQuery('')
+      }
+      if (e.key === 'Escape') setCmdOpen(false)
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [])
+
+  useEffect(() => {
+    if (cmdOpen) setTimeout(() => cmdInputRef.current?.focus(), 50)
+  }, [cmdOpen])
+
+  const cmdResults = cmdQuery.trim()
+    ? screens.filter(s => s.label.toLowerCase().includes(cmdQuery.toLowerCase()))
+    : screens
 
   const active = screens.find(s => s.id === activeId)
 
@@ -658,39 +683,121 @@ export default function App() {
           {active?.render()}
         </div>
 
-        {/* Dark mode toggle */}
-        <button
-          type="button"
-          onClick={toggleDarkMode}
-          className="fixed top-5 right-5 z-[70] w-9 h-9 flex items-center justify-center rounded-lg bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-colors duration-150 cursor-pointer"
-          style={{ boxShadow: 'var(--inv-shadow)' }}
-          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          <Icon name={darkMode ? 'sun' : 'moon'} size={16} />
-        </button>
+        {/* Top bar */}
+        <header className="fixed top-0 left-52 right-0 z-[70] h-14 px-5 flex items-center justify-between">
+          {/* Center — search trigger (viewport centered) */}
+          <div className="fixed left-1/2 top-0 h-14 -translate-x-1/2 flex items-center z-[70]">
+            <button
+              type="button"
+              onClick={() => { setCmdOpen(true); setCmdQuery('') }}
+              className="h-9 px-4 flex items-center gap-2 rounded-lg text-[13px] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150 cursor-pointer"
+            >
+              <Icon name="search" size={14} />
+              <span className="hidden sm:inline">Search components...</span>
+              <kbd className="hidden sm:inline text-[11px] font-mono font-medium text-[var(--inv-muted)]">⌘K</kbd>
+            </button>
+          </div>
 
-        <nav className="fixed left-0 top-0 bottom-0 w-52 px-4 flex flex-col justify-center gap-0.5 z-[70] overflow-y-auto">
-          {screens.map((s, i) => (
-            <div key={s.id}>
-              {s.group && (
-                <div className={`px-2 pt-3 pb-1 text-[11px] uppercase tracking-wider text-[var(--inv-muted)] opacity-50 ${i > 0 ? 'mt-1' : ''}`}>
-                  {s.group}
+          {/* Right — GitHub + dark mode */}
+          <div className="ml-auto flex items-center gap-1">
+            <a
+              href="https://github.com/eythandamico/invariant"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-9 px-2 flex items-center gap-1.5 rounded-lg text-[13px] font-medium text-[var(--inv-body)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150"
+            >
+              <Icon name="github" size={16} />
+              <span className="hidden sm:inline">GitHub</span>
+            </a>
+            <button
+              type="button"
+              onClick={toggleDarkMode}
+              className="w-9 h-9 flex items-center justify-center rounded-lg text-[var(--inv-body)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150 cursor-pointer"
+              aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              <Icon name={darkMode ? 'sun' : 'moon'} size={16} />
+            </button>
+          </div>
+        </header>
+
+        {/* Command palette */}
+        {cmdOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-[80] bg-black/40 backdrop-blur-sm"
+              onClick={() => setCmdOpen(false)}
+              style={{ animation: 'fadeIn 0.15s ease-out' }}
+            />
+            <div className="fixed top-[15%] left-1/2 z-[81] w-[90vw] max-w-[480px]" style={{ transform: 'translateX(-50%)', animation: 'cmdIn 0.2s cubic-bezier(0.34, 1.3, 0.64, 1)' }}>
+              <div className="rounded-2xl bg-[var(--inv-surface)] overflow-hidden" style={{ boxShadow: 'var(--inv-shadow)' }}>
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--inv-border)]">
+                  <Icon name="search" size={18} className="text-[var(--inv-muted)]" />
+                  <input
+                    ref={cmdInputRef}
+                    type="text"
+                    value={cmdQuery}
+                    onChange={(e) => setCmdQuery(e.target.value)}
+                    placeholder="Search components..."
+                    className="flex-1 bg-transparent text-[15px] text-[var(--inv-heading)] placeholder-[var(--inv-muted)] outline-none"
+                  />
+                  <kbd className="text-[11px] font-mono font-medium text-[var(--inv-muted)]">ESC</kbd>
                 </div>
-              )}
-              <button
-                type="button"
-                onClick={() => setActiveId(s.id)}
-                className={`w-full text-left px-2 py-1 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
-                  activeId === s.id
-                    ? 'text-[var(--inv-heading)] font-medium'
-                    : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
-                }`}
-              >
-                {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
-                {s.label}
-              </button>
+                <div className="max-h-[320px] overflow-y-auto py-2">
+                  {cmdResults.length === 0 ? (
+                    <div className="px-4 py-6 text-center text-[13px] text-[var(--inv-muted)]">No components found</div>
+                  ) : (
+                    cmdResults.map(s => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => { setActiveId(s.id); setCmdOpen(false) }}
+                        className={`w-full text-left px-4 py-2 text-[15px] flex items-center gap-2 cursor-pointer transition-[background-color] duration-100 hover:bg-[var(--inv-nav-hover-bg)] ${
+                          activeId === s.id ? 'text-[var(--inv-accent)] font-medium' : 'text-[var(--inv-heading)]'
+                        }`}
+                      >
+                        {s.label}
+                        {s.group && <span className="text-[11px] text-[var(--inv-muted)] ml-auto">{s.group}</span>}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
-          ))}
+            <style>{`
+              @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+              @keyframes cmdIn { from { opacity: 0; transform: translateX(-50%) scale(0.96); filter: blur(4px) } to { opacity: 1; transform: translateX(-50%) scale(1); filter: blur(0) } }
+            `}</style>
+          </>
+        )}
+
+        <nav className="fixed left-0 top-0 bottom-0 w-52 z-[70] flex flex-col">
+          <div className="px-4 pt-5 pb-3 flex items-center gap-2 flex-shrink-0">
+            <Icon name="shrimp" size={18} className="text-[var(--inv-accent)]" />
+            <span className="text-[15px] font-semibold text-[var(--inv-heading)]">Invariant</span>
+          </div>
+          <div className="flex-1 overflow-y-auto px-4 pb-6 flex flex-col justify-center gap-0.5" style={{ scrollbarWidth: 'none' }}>
+            {screens.map((s, i) => (
+              <div key={s.id}>
+                {s.group && (
+                  <div className={`px-2 pt-3 pb-1 text-[11px] uppercase tracking-wider text-[var(--inv-muted)] opacity-50 ${i > 0 ? 'mt-1' : ''}`}>
+                    {s.group}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setActiveId(s.id)}
+                  className={`w-full text-left px-2 py-1 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
+                    activeId === s.id
+                      ? 'text-[var(--inv-heading)] font-medium'
+                      : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
+                  }`}
+                >
+                  {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
+                  {s.label}
+                </button>
+              </div>
+            ))}
+          </div>
         </nav>
       </div>
     </ToastProvider>
