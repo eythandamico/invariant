@@ -1,0 +1,218 @@
+{
+  "accordion": {
+    "file": "components/accordion.jsx",
+    "export": "Accordion",
+    "doc": "docs/accordion.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "action-button": {
+    "file": "components/action-button.jsx",
+    "export": "ActionButton",
+    "doc": "docs/action-button.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "agent-avatar": {
+    "file": "components/agent-avatar.jsx",
+    "export": "AgentAvatar",
+    "doc": "docs/agent-avatar.md",
+    "deps": ["lib/popover.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "badge": {
+    "file": "components/badge.jsx",
+    "export": "Badge",
+    "doc": "docs/badge.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "bottom-nav": {
+    "file": "components/bottom-nav.jsx",
+    "export": "BottomNav",
+    "doc": "docs/bottom-nav.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js", "lib/use-click-outside.js", "lib/use-is-mobile.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "button": {
+    "file": "components/button.jsx",
+    "export": "Button",
+    "doc": "docs/button.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "divider": {
+    "file": "components/divider.jsx",
+    "export": "Divider",
+    "doc": "docs/divider.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "dropdown": {
+    "file": "components/dropdown.jsx",
+    "export": "Dropdown",
+    "doc": "docs/dropdown.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "expand-card": {
+    "file": "components/expand-card.jsx",
+    "export": "ExpandCard",
+    "doc": "docs/expand-card.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "message-bubble": {
+    "file": "components/message-bubble.jsx",
+    "export": "MessageBubble",
+    "doc": "docs/message-bubble.md",
+    "deps": ["lib/icon.jsx", "components/agent-avatar.jsx", "components/profile-avatar.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "page-section": {
+    "file": "components/page-section.jsx",
+    "export": "PageSection",
+    "doc": "docs/page-section.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "profile-avatar": {
+    "file": "components/profile-avatar.jsx",
+    "export": "ProfileAvatar, ProfileAvatarGroup",
+    "doc": "docs/profile-avatar.md",
+    "deps": ["lib/popover.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "profile-menu": {
+    "file": "components/profile-menu.jsx",
+    "export": "ProfileMenu",
+    "doc": "docs/profile-menu.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "prompt-bar": {
+    "file": "components/prompt-bar.jsx",
+    "export": "PromptBar",
+    "doc": "docs/prompt-bar.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "row": {
+    "file": "components/row.jsx",
+    "export": "Row",
+    "doc": "docs/row.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "search-bar": {
+    "file": "components/search-bar.jsx",
+    "export": "SearchBar",
+    "doc": "docs/search-bar.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "search-toggle": {
+    "file": "components/search-toggle.jsx",
+    "export": "SearchToggle",
+    "doc": "docs/search-toggle.md",
+    "deps": ["lib/icon.jsx", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "segmented-control": {
+    "file": "components/segmented-control.jsx",
+    "export": "SegmentedControl",
+    "doc": "docs/segmented-control.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "select": {
+    "file": "components/select.jsx",
+    "export": "Select",
+    "doc": "docs/select.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "spotlight-card": {
+    "file": "components/spotlight-card.jsx",
+    "export": "SpotlightCard",
+    "doc": "docs/spotlight-card.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "stack": {
+    "file": "components/stack.jsx",
+    "export": "Stack",
+    "doc": "docs/stack.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "step-indicator": {
+    "file": "components/step-indicator.jsx",
+    "export": "StepIndicator",
+    "doc": "docs/step-indicator.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "surface": {
+    "file": "components/surface.jsx",
+    "export": "Surface",
+    "doc": "docs/surface.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "text-input": {
+    "file": "components/text-input.jsx",
+    "export": "TextInput",
+    "doc": "docs/text-input.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "toast": {
+    "file": "components/toast.jsx",
+    "export": "ToastProvider, useToast",
+    "doc": "docs/toast.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "toggle": {
+    "file": "components/toggle.jsx",
+    "export": "Toggle",
+    "doc": "docs/toggle.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "workspace-switcher": {
+    "file": "components/workspace-switcher.jsx",
+    "export": "WorkspaceSwitcher",
+    "doc": "docs/workspace-switcher.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  }
+}

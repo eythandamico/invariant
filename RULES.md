@@ -139,3 +139,20 @@ All dropdown menus must use:
 - PascalCase exports (`BottomNav`)
 - Import paths use `.jsx` / `.js` extensions
 - All imports from `lib/` use relative paths (`../lib/icon.jsx`)
+
+## 11. Layout and responsiveness
+
+Use layout primitives (`Stack`, `Row`, `Surface`, `PageSection`, `Divider`) for page structure. Never use raw `div` with ad-hoc spacing when a primitive exists.
+
+Breakpoint conventions:
+- **Mobile-first**: Write base styles for mobile, add complexity upward
+- **`sm:` (640px)**: Side padding increases, single-column layouts may start showing secondary elements
+- **`md:` (768px)**: Two-column layouts become viable
+- **`lg:` (1024px)**: Full desktop layout, three-column grids, sidebars
+
+Page width constraints:
+- Forms and settings: `PageSection width="md"` (672px)
+- Dashboards and wide content: `PageSection width="lg"` (1024px)
+- Full-bleed: `PageSection width="full"`
+
+When components need to stack vertically on mobile and sit side-by-side on desktop, use `Row` with `wrap` and control child widths with Tailwind (`w-full md:w-auto`).

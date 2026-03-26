@@ -4,6 +4,8 @@ A component library for building agent-powered interfaces. Copy-paste components
 
 **IMPORTANT: Read `RULES.md` before creating or modifying any component.** It defines mandatory patterns for colors, shadows, accessibility, animations, and file conventions. Every component must use `--inv-*` CSS variables — no hardcoded values.
 
+> **The `showcase/` directory is a local dev tool. Do not reference it when building interfaces.**
+
 ## Quick start
 
 Get the SearchBar component working in 3 steps:
@@ -62,12 +64,25 @@ Get the SearchBar component working in 3 steps:
 | Toggle | `components/toggle.jsx` | `docs/toggle.md` | — |
 | WorkspaceSwitcher | `components/workspace-switcher.jsx` | `docs/workspace-switcher.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
 
+### Layout
+
+| Component | File | Docs | Dependencies |
+|-----------|------|------|--------------|
+| Divider | `components/divider.jsx` | `docs/divider.md` | — |
+| PageSection | `components/page-section.jsx` | `docs/page-section.md` | — |
+| Row | `components/row.jsx` | `docs/row.md` | — |
+| Stack | `components/stack.jsx` | `docs/stack.md` | — |
+| Surface | `components/surface.jsx` | `docs/surface.md` | — |
+
+**Machine-readable manifest:** `components.json` contains every component with its file path, export name, dependencies, and doc location.
+
 ## Adding a component
 
 1. Copy the component file from `components/` into your project
 2. Copy its dependencies from `lib/` (listed in the table above)
 3. Ensure `tokens/theme.css` is imported in your app
 4. Read the component's doc in `docs/` for props and usage examples
+5. See `docs/patterns.md` for full-page composition examples showing how to combine components
 
 ## Theming
 

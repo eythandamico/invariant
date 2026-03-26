@@ -52,6 +52,13 @@
   --inv-text-base: 15px;
   --inv-text-lg: 18px;
   --inv-text-xl: 24px;
+
+  /* Spacing */
+  --inv-space-xs: 4px;
+  --inv-space-sm: 8px;
+  --inv-space-md: 16px;
+  --inv-space-lg: 24px;
+  --inv-space-xl: 40px;
 }
 
 [data-theme="dark"] {
