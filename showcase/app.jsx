@@ -281,7 +281,7 @@ function useScreens(darkMode, toggleDarkMode) {
               ]}
               activeTab={isHorizontalDrop ? 'center' : dropdownAlign}
               onTabChange={(id) => !isHorizontalDrop && setDropdownAlign(id)}
-              className={isHorizontalDrop ? 'opacity-40 pointer-events-none' : ''}
+              className={isHorizontalDrop ? 'opacity-40 cursor-not-allowed [&_*]:pointer-events-none' : ''}
             />
           </div>
         </>
@@ -452,7 +452,7 @@ function useScreens(darkMode, toggleDarkMode) {
               ]}
               activeTab={avatarAlert ? 'on' : 'off'}
               onTabChange={(id) => avatarView === 'single' && setAvatarAlert(id === 'on')}
-              className={avatarView === 'group' ? 'opacity-40 pointer-events-none' : ''}
+              className={avatarView === 'group' ? 'opacity-40 cursor-not-allowed [&_*]:pointer-events-none' : ''}
             />
           </div>
         </>
