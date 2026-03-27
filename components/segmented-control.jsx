@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import Icon from '../lib/icon.jsx'
 
-export function SegmentedControl({ tabs = [], activeTab, onTabChange, className = '' }) {
+export function SegmentedControl({ tabs = [], activeTab, onTabChange, variant = 'default', className = '' }) {
   const containerRef = useRef(null)
   const [indicator, setIndicator] = useState({ left: 0, width: 0 })
   const [ready, setReady] = useState(false)
@@ -18,14 +18,25 @@ export function SegmentedControl({ tabs = [], activeTab, onTabChange, className 
     setReady(true)
   }, [activeTab])
 
+  const isSubdued = variant === 'subdued'
+
   return (
-    <div ref={containerRef} className={`relative flex gap-1 bg-[var(--inv-surface)] rounded-xl p-1 ${className}`} style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
+    <div
+      ref={containerRef}
+      className={`relative flex gap-1 rounded-xl p-1 ${
+        isSubdued ? 'bg-[var(--inv-bg-alt)]' : 'bg-[var(--inv-surface)]'
+      } ${className}`}
+      style={isSubdued ? {} : { boxShadow: 'var(--inv-shadow-sm)' }}
+    >
       <div
-        className="absolute top-1 bottom-1 rounded-lg bg-[var(--inv-nav-hover-bg)]"
+        className={`absolute top-1 bottom-1 rounded-lg ${
+          isSubdued ? 'bg-[var(--inv-surface)]' : 'bg-[var(--inv-nav-hover-bg)]'
+        }`}
         style={{
           left: indicator.left,
           width: indicator.width,
           transition: ready ? 'left 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
+          boxShadow: isSubdued ? 'var(--inv-shadow-sm)' : undefined,
         }}
       />
       {tabs.map(tab => {

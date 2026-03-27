@@ -50,6 +50,7 @@ import {
   Calendar,
   CalendarCheck,
   Newspaper,
+  ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
   MoreVertical,
@@ -79,6 +80,7 @@ import {
   Shrimp,
   Paperclip,
   SendHorizontal,
+  Minus,
 } from 'lucide-react'
 
 const icons = {
@@ -130,6 +132,7 @@ const icons = {
   'list-box': ListChecks,
   'file-text': FileText,
   plus: Plus,
+  minus: Minus,
   'thumbs-up': ThumbsUp,
   'thumbs-down': ThumbsDown,
   'external-link': ExternalLink,
@@ -137,6 +140,7 @@ const icons = {
   'calendar-check': CalendarCheck,
   article: Newspaper,
   'edit-box': Newspaper,
+  'chevron-left': ChevronLeft,
   'chevron-right': ChevronRight,
   'chevrons-vertical': ChevronsUpDown,
   'more-vertical': MoreVertical,

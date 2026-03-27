@@ -1,14 +1,31 @@
 import { useState } from 'react'
 import Icon from '../lib/icon.jsx'
-import { popoverStyle, menuShadow } from '../lib/popover.js'
+import { slideStyle, menuShadow } from '../lib/popover.js'
 import { useClickOutside } from '../lib/use-click-outside.js'
 
-export function ProfileMenu({ avatarUrl, profile, profileItems = [] }) {
+const POSITION_CLASSES = {
+  'bottom-left':   'top-full left-0 mt-2',
+  'bottom-center': 'top-full left-1/2 -translate-x-1/2 mt-2',
+  'bottom-right':  'top-full right-0 mt-2',
+  'top-left':      'bottom-full left-0 mb-2',
+  'top-center':    'bottom-full left-1/2 -translate-x-1/2 mb-2',
+  'top-right':     'bottom-full right-0 mb-2',
+  'left-top':      'right-full top-0 mr-2',
+  'left-center':   'right-full top-1/2 -translate-y-1/2 mr-2',
+  'left-bottom':   'right-full bottom-0 mr-2',
+  'right-top':     'left-full top-0 ml-2',
+  'right-center':  'left-full top-1/2 -translate-y-1/2 ml-2',
+  'right-bottom':  'left-full bottom-0 ml-2',
+}
+
+export function ProfileMenu({ avatarUrl, profile, profileItems = [], placement = 'bottom-right' }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useClickOutside(menuOpen, () => setMenuOpen(false))
 
   if (!avatarUrl) return null
+
+  const posClass = POSITION_CLASSES[placement] || POSITION_CLASSES['bottom-right']
 
   return (
     <div className="relative w-10 h-10 flex-shrink-0" onMouseDown={e => e.stopPropagation()}>
@@ -26,8 +43,8 @@ export function ProfileMenu({ avatarUrl, profile, profileItems = [] }) {
       </button>
 
       <div
-        className="absolute top-full right-0 mt-2"
-        style={popoverStyle(menuOpen, 'top right')}
+        className={`absolute z-10 ${posClass}`}
+        style={slideStyle(menuOpen, placement)}
         onMouseDown={e => e.stopPropagation()}
       >
         <div className="rounded-[20px] bg-[var(--inv-menu-bg)]/90 backdrop-blur-xl py-2 px-2 w-56" role="menu" style={menuShadow}>

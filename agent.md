@@ -6,6 +6,21 @@ A component library for building agent-powered interfaces. Copy-paste components
 
 > **The `showcase/` directory is a local dev tool. Do not reference it when building interfaces.**
 
+## Common mistakes
+
+These are the most frequent errors agents make with this library. Read this before writing any code.
+
+1. **Never use hardcoded colors.** No `text-gray-500`, no `bg-slate-200`, no `#hex` values. Every color comes from a `--inv-*` CSS variable. Use `text-[var(--inv-heading)]`, `bg-[var(--inv-surface)]`, etc. The only exceptions are listed in `RULES.md` section 1.
+2. **Never import icons from `lucide-react` directly.** Always use `import Icon from '../lib/icon.jsx'` and the name-based API: `<Icon name="search" size={18} />`. The icon map in `lib/icon.jsx` is the single source of truth for available icons.
+3. **Always import `tokens/theme.css` before using any component.** Without it, every `--inv-*` variable is undefined and components render with no colors, no shadows, no spacing.
+4. **Never reference or copy patterns from the `showcase/` directory.** It is a local development tool with demo-specific code that should not appear in production interfaces.
+5. **Use layout primitives for page structure.** Use `Stack`, `Row`, `Surface`, `PageSection`, and `Divider` instead of raw `div` elements with ad-hoc Tailwind spacing. See `docs/patterns.md` for full-page composition examples.
+6. **Never write your own click-outside or escape-key logic.** Import `useClickOutside` from `lib/use-click-outside.js`. Components using this hook must call `e.stopPropagation()` on their container's `onMouseDown` to prevent the global listener from immediately closing the popover.
+7. **Never hardcode shadows.** Use `--inv-shadow`, `--inv-shadow-sm`, `--inv-nav-shadow`, or `--inv-menu-shadow` via CSS variables. Import `menuShadow` from `lib/popover.js` for dropdown menus.
+8. **Never use `font-bold` (700) in components.** Use `font-medium` (500) for interactive text and `font-semibold` (600) for names/headings within menus.
+9. **Never introduce arbitrary font sizes.** Use the type scale: `--inv-text-xs` (11px), `--inv-text-sm` (13px), `--inv-text-base` (15px), `--inv-text-lg` (18px), `--inv-text-xl` (24px).
+10. **Use `components.json` to resolve dependencies.** It lists every component's file path, export name, lib dependencies, and doc location in machine-readable format.
+
 ## Quick start
 
 Get the SearchBar component working in 3 steps:
@@ -44,13 +59,21 @@ Get the SearchBar component working in 3 steps:
 | Accordion | `components/accordion.jsx` | `docs/accordion.md` | `lib/icon.jsx` |
 | ActionButton | `components/action-button.jsx` | `docs/action-button.md` | `lib/icon.jsx` |
 | AgentAvatar | `components/agent-avatar.jsx` | `docs/agent-avatar.md` | `lib/popover.js` |
+| Card | `components/card.jsx` | `docs/card.md` | — |
 | Badge | `components/badge.jsx` | `docs/badge.md` | — |
+| Dialog | `components/dialog.jsx` | `docs/dialog.md` | `lib/popover.js`, `lib/use-click-outside.js` |
 | BottomNav | `components/bottom-nav.jsx` | `docs/bottom-nav.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js`, `lib/use-is-mobile.js` |
 | Button | `components/button.jsx` | `docs/button.md` | `lib/icon.jsx` |
+| Checkbox | `components/checkbox.jsx` | `docs/checkbox.md` | `lib/icon.jsx` |
 | Dropdown | `components/dropdown.jsx` | `docs/dropdown.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
 | ExpandCard | `components/expand-card.jsx` | `docs/expand-card.md` | `lib/icon.jsx` |
+| PinInput | `components/pin-input.jsx` | `docs/pin-input.md` | — |
+| Overlay | `components/overlay.jsx` | `docs/overlay.md` | — |
+| NumberInput | `components/number-input.jsx` | `docs/number-input.md` | `lib/icon.jsx` |
+| Modal | `components/modal.jsx` | `docs/modal.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
 | MessageBubble | `components/message-bubble.jsx` | `docs/message-bubble.md` | `lib/icon.jsx`, `components/agent-avatar.jsx`, `components/profile-avatar.jsx` |
 | ProfileAvatar | `components/profile-avatar.jsx` | `docs/profile-avatar.md` | `lib/popover.js` |
+| RadioGroup | `components/radio-group.jsx` | `docs/radio-group.md` | — |
 | ProfileMenu | `components/profile-menu.jsx` | `docs/profile-menu.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
 | PromptBar | `components/prompt-bar.jsx` | `docs/prompt-bar.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
 | SearchBar | `components/search-bar.jsx` | `docs/search-bar.md` | `lib/icon.jsx` |
@@ -63,6 +86,16 @@ Get the SearchBar component working in 3 steps:
 | Toast | `components/toast.jsx` | `docs/toast.md` | `lib/icon.jsx` |
 | Toggle | `components/toggle.jsx` | `docs/toggle.md` | — |
 | WorkspaceSwitcher | `components/workspace-switcher.jsx` | `docs/workspace-switcher.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
+
+| EmptyState | `components/empty-state.jsx` | `docs/empty-state.md` | `lib/icon.jsx` |
+| ImageCarousel | `components/image-carousel.jsx` | `docs/image-carousel.md` | `lib/icon.jsx`, `components/step-indicator.jsx` |
+| IconButton | `components/icon-button.jsx` | `docs/icon-button.md` | `lib/icon.jsx` |
+| Menu, MenuItem, MenuDivider | `components/menu.jsx` | `docs/menu.md` | `lib/icon.jsx`, `lib/popover.js` |
+| SliderInput | `components/slider-input.jsx` | `docs/slider-input.md` | — |
+| Skeleton | `components/skeleton.jsx` | `docs/skeleton.md` | — |
+| Textarea | `components/textarea.jsx` | `docs/textarea.md` | — |
+| Spinner | `components/spinner.jsx` | `docs/spinner.md` | — |
+| Tooltip | `components/tooltip.jsx` | `docs/tooltip.md` | `lib/popover.js` |
 
 ### Layout
 

@@ -9,6 +9,7 @@ Tab switcher with sliding indicator animation. Supports text labels, icons, or b
 | tabs | `Array<{id, label?, icon?}>` | `[]` | Tab definitions |
 | activeTab | `string` | — | Active tab id |
 | onTabChange | `(id) => void` | — | Tab change callback |
+| variant | `'default'\|'subdued'` | `'default'` | `default`: white bg + hover indicator. `subdued`: bg-alt track + raised white indicator |
 | className | `string` | `''` | Additional CSS classes |
 
 ## Dependencies

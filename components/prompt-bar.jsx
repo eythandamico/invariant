@@ -156,7 +156,7 @@ export function PromptBar({
             className="w-9 h-9 flex items-center justify-center rounded-full text-[var(--inv-muted)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150 cursor-pointer"
             aria-label="Upload file"
           >
-            <Icon name="paperclip" size={18} />
+            <Icon name="plus" size={18} />
           </button>
 
           {/* Model selector */}

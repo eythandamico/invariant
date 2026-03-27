@@ -63,6 +63,102 @@
     "tokens": ["tokens/theme.css"],
     "peer": ["lucide-react"]
   },
+  "number-input": {
+    "file": "components/number-input.jsx",
+    "export": "NumberInput",
+    "doc": "docs/number-input.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "pin-input": {
+    "file": "components/pin-input.jsx",
+    "export": "PinInput",
+    "doc": "docs/pin-input.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "radio-group": {
+    "file": "components/radio-group.jsx",
+    "export": "RadioGroup",
+    "doc": "docs/radio-group.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "slider-input": {
+    "file": "components/slider-input.jsx",
+    "export": "SliderInput",
+    "doc": "docs/slider-input.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "textarea": {
+    "file": "components/textarea.jsx",
+    "export": "Textarea",
+    "doc": "docs/textarea.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "modal": {
+    "file": "components/modal.jsx",
+    "export": "Modal",
+    "doc": "docs/modal.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "image-carousel": {
+    "file": "components/image-carousel.jsx",
+    "export": "ImageCarousel",
+    "doc": "docs/image-carousel.md",
+    "deps": ["lib/icon.jsx", "components/step-indicator.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "icon-button": {
+    "file": "components/icon-button.jsx",
+    "export": "IconButton",
+    "doc": "docs/icon-button.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "menu": {
+    "file": "components/menu.jsx",
+    "export": "Menu, MenuItem, MenuDivider",
+    "doc": "docs/menu.md",
+    "deps": ["lib/icon.jsx", "lib/popover.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "overlay": {
+    "file": "components/overlay.jsx",
+    "export": "Overlay",
+    "doc": "docs/overlay.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "spinner": {
+    "file": "components/spinner.jsx",
+    "export": "Spinner",
+    "doc": "docs/spinner.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "tooltip": {
+    "file": "components/tooltip.jsx",
+    "export": "Tooltip",
+    "doc": "docs/tooltip.md",
+    "deps": ["lib/popover.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
   "expand-card": {
     "file": "components/expand-card.jsx",
     "export": "ExpandCard",
@@ -206,6 +302,46 @@
     "deps": [],
     "tokens": ["tokens/theme.css"],
     "peer": []
+  },
+  "skeleton": {
+    "file": "components/skeleton.jsx",
+    "export": "Skeleton",
+    "doc": "docs/skeleton.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "checkbox": {
+    "file": "components/checkbox.jsx",
+    "export": "Checkbox",
+    "doc": "docs/checkbox.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "card": {
+    "file": "components/card.jsx",
+    "export": "Card",
+    "doc": "docs/card.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "dialog": {
+    "file": "components/dialog.jsx",
+    "export": "Dialog",
+    "doc": "docs/dialog.md",
+    "deps": ["lib/popover.js", "lib/use-click-outside.js"],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "empty-state": {
+    "file": "components/empty-state.jsx",
+    "export": "EmptyState",
+    "doc": "docs/empty-state.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
   },
   "workspace-switcher": {
     "file": "components/workspace-switcher.jsx",

@@ -1,4 +1,25 @@
-export function StepIndicator({ steps = 5, activeStep = 0, onStepChange, className = '' }) {
+export function StepIndicator({ steps = 5, activeStep = 0, onStepChange, variant = 'default', className = '' }) {
+  const isDark = variant === 'dark'
+  const isLight = variant === 'light'
+
+  const isDots = variant === 'dots' || variant === 'dots-light'
+  const isDotsLight = variant === 'dots-light'
+
+  const getColor = (isActive, isCompleted) => {
+    if (isDotsLight) return '#ffffff'
+    if (isDots) return 'var(--inv-heading)'
+    if (isLight) return '#ffffff'
+    if (isDark) return 'var(--inv-heading)'
+    return isActive ? 'var(--inv-accent)' : isCompleted ? 'var(--inv-heading)' : 'var(--inv-border)'
+  }
+
+  const getOpacity = (isActive, isCompleted) => {
+    if (isDots || isDotsLight) return isActive ? 1 : 0.35
+    if (isLight) return isActive ? 1 : 0.4
+    if (isDark) return isActive ? 1 : 0.3
+    return isCompleted ? 0.35 : 1
+  }
+
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       {Array.from({ length: steps }, (_, i) => {
@@ -16,13 +37,9 @@ export function StepIndicator({ steps = 5, activeStep = 0, onStepChange, classNa
             <div
               className="h-2.5 rounded-full"
               style={{
-                width: isActive ? 36 : 10,
-                backgroundColor: isActive
-                  ? 'var(--inv-accent)'
-                  : isCompleted
-                    ? 'var(--inv-heading)'
-                    : 'var(--inv-border)',
-                opacity: isCompleted ? 0.35 : 1,
+                width: (isDots || isDotsLight) ? 10 : (isActive ? 36 : 10),
+                backgroundColor: getColor(isActive, isCompleted),
+                opacity: getOpacity(isActive, isCompleted),
                 transition: 'width 0.5s cubic-bezier(0.34, 1.3, 0.64, 1), background-color 0.4s ease, opacity 0.4s ease',
               }}
             />

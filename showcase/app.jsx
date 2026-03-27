@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { BottomNav } from '../components/bottom-nav.jsx'
 import { WorkspaceSwitcher } from '../components/workspace-switcher.jsx'
 import { ProfileMenu } from '../components/profile-menu.jsx'
@@ -21,6 +22,17 @@ import { Button } from '../components/button.jsx'
 import { Toggle } from '../components/toggle.jsx'
 import { Accordion } from '../components/accordion.jsx'
 import { Badge } from '../components/badge.jsx'
+import { IconButton } from '../components/icon-button.jsx'
+import { PinInput } from '../components/pin-input.jsx'
+import { NumberInput } from '../components/number-input.jsx'
+import { Textarea } from '../components/textarea.jsx'
+import { Checkbox } from '../components/checkbox.jsx'
+import { RadioGroup } from '../components/radio-group.jsx'
+import { SliderInput } from '../components/slider-input.jsx'
+import { Card } from '../components/card.jsx'
+import { ImageCarousel } from '../components/image-carousel.jsx'
+import { Dialog } from '../components/dialog.jsx'
+import { Modal } from '../components/modal.jsx'
 import Icon from '../lib/icon.jsx'
 import { TABS, CHAT_TABS, STARTUPS } from './data.jsx'
 
@@ -34,7 +46,7 @@ const PROFILE_ITEMS = [
 
 function ComponentStage({ children }) {
   return (
-    <div className="relative" style={{ transform: 'translate(0,0)' }}>
+    <div className="relative">
       {children}
     </div>
   )
@@ -63,6 +75,21 @@ function useScreens(darkMode, toggleDarkMode) {
   const [avatarView, setAvatarView] = useState('single')
   const [toggleOn, setToggleOn] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
+  const [cardImage, setCardImage] = useState(true)
+  const [carouselAutoHide, setCarouselAutoHide] = useState(false)
+  const [carouselPos, setCarouselPos] = useState('bottom')
+  const [segVariant, setSegVariant] = useState('subdued')
+  const [profileDir, setProfileDir] = useState('bottom')
+  const [profileAlign, setProfileAlign] = useState('right')
+  const [pinValue, setPinValue] = useState('')
+  const [numberValue, setNumberValue] = useState(5)
+  const [textareaValue, setTextareaValue] = useState('')
+  const [checkboxA, setCheckboxA] = useState(false)
+  const [checkboxB, setCheckboxB] = useState(true)
+  const [radioValue, setRadioValue] = useState('pro')
+  const [sliderValue, setSliderValue] = useState(40)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('home')
   const [chatTab, setChatTab] = useState('home')
   const [currentSlug, setCurrentSlug] = useState('acme-ai-labs')
@@ -97,15 +124,43 @@ function useScreens(darkMode, toggleDarkMode) {
     {
       id: 'profile',
       label: 'ProfileMenu',
-      render: () => (
-        <ComponentStage>
-          <ProfileMenu
-            avatarUrl="/profile_pic.jpg"
-            profile={PROFILE}
-            profileItems={PROFILE_ITEMS}
-          />
-        </ComponentStage>
-      ),
+      render: () => {
+        const isHorizontal = profileDir === 'left' || profileDir === 'right'
+        return (
+          <>
+            <ComponentStage>
+              <ProfileMenu
+                avatarUrl="/profile_pic.jpg"
+                profile={PROFILE}
+                profileItems={PROFILE_ITEMS}
+                placement={`${profileDir}-${profileAlign}`}
+              />
+            </ComponentStage>
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+              <SegmentedControl
+                tabs={[
+                  { id: 'top', icon: 'arrow-up' },
+                  { id: 'bottom', icon: 'arrow-down' },
+                  { id: 'left', icon: 'arrow-left' },
+                  { id: 'right', icon: 'arrow-right' },
+                ]}
+                activeTab={profileDir}
+                onTabChange={(id) => { setProfileDir(id); if (id === 'left' || id === 'right') setProfileAlign('center') }}
+              />
+              <SegmentedControl
+                tabs={[
+                  { id: 'left', icon: 'align-left' },
+                  { id: 'center', icon: 'align-center' },
+                  { id: 'right', icon: 'align-right' },
+                ]}
+                activeTab={isHorizontal ? 'center' : profileAlign}
+                onTabChange={(id) => !isHorizontal && setProfileAlign(id)}
+                className={isHorizontal ? 'opacity-40 cursor-not-allowed [&_*]:pointer-events-none' : ''}
+              />
+            </div>
+          </>
+        )
+      },
     },
     {
       id: 'startup',
@@ -144,7 +199,6 @@ function useScreens(darkMode, toggleDarkMode) {
             <div className="w-[520px]">
               <SearchBar
                 placeholder="Search anything..."
-                autoFocus
               />
             </div>
             <SearchToggle placeholder="Search anything..." />
@@ -346,25 +400,19 @@ function useScreens(darkMode, toggleDarkMode) {
       ),
     },
     {
-      id: 'icon-buttons',
-      label: 'IconButtons',
+      id: 'icon-button',
+      label: 'IconButton',
       render: () => (
         <ComponentStage>
           <div className="flex items-center gap-2">
-            {[
-              { icon: 'plus', label: 'Add' },
-              { icon: 'edit', label: 'Edit' },
-              { icon: 'upload', label: 'Upload' },
-            ].map(btn => (
-              <button
-                key={btn.icon}
-                type="button"
-                className="w-11 h-11 flex items-center justify-center rounded-xl bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-[color,box-shadow,scale] duration-200 ease-out cursor-pointer active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[var(--inv-accent)] focus-visible:ring-offset-1 [box-shadow:var(--inv-shadow-sm)] hover:[box-shadow:var(--inv-shadow-sm-hover)]"
-                aria-label={btn.label}
-              >
-                <Icon name={btn.icon} size={20} />
-              </button>
-            ))}
+            <IconButton icon="plus" label="Add" elevated />
+            <IconButton icon="edit" label="Edit" elevated />
+            <IconButton icon="upload" label="Upload" elevated />
+          </div>
+          <div className="flex items-center gap-2 mt-4">
+            <IconButton icon="close" label="Close" size="small" />
+            <IconButton icon="settings" label="Settings" size="small" />
+            <IconButton icon="search" label="Search" size="small" />
           </div>
         </ComponentStage>
       ),
@@ -404,6 +452,94 @@ function useScreens(darkMode, toggleDarkMode) {
             </div>
           </div>
         </>
+      ),
+    },
+    {
+      id: 'textarea',
+      label: 'Textarea',
+      render: () => (
+        <ComponentStage>
+          <div className="w-[360px]">
+            <Textarea
+              label="Bio"
+              placeholder="Tell us about yourself..."
+              value={textareaValue}
+              onChange={(e) => setTextareaValue(e.target.value)}
+              maxLength={280}
+              rows={5}
+            />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'number-input',
+      label: 'NumberInput',
+      render: () => (
+        <ComponentStage>
+          <NumberInput
+            value={numberValue}
+            onChange={setNumberValue}
+            min={0}
+            max={99}
+          />
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'pin-input',
+      label: 'PinInput',
+      render: () => (
+        <ComponentStage>
+          <PinInput value={pinValue} onChange={setPinValue} />
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'checkbox',
+      label: 'Checkbox',
+      render: () => (
+        <ComponentStage>
+          <div className="flex flex-col gap-3">
+            <Checkbox checked={checkboxA} onChange={setCheckboxA} label="I agree to the terms" />
+            <Checkbox checked={checkboxB} onChange={setCheckboxB} label="Send me updates" />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'radio-group',
+      label: 'RadioGroup',
+      render: () => (
+        <ComponentStage>
+          <RadioGroup
+            options={[
+              { id: 'free', label: 'Free' },
+              { id: 'pro', label: 'Pro' },
+              { id: 'team', label: 'Team' },
+            ]}
+            value={radioValue}
+            onChange={setRadioValue}
+          />
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'slider-input',
+      label: 'SliderInput',
+      render: () => (
+        <ComponentStage>
+          <div className="w-[360px]">
+            <SliderInput
+              label="Volume"
+              value={sliderValue}
+              onChange={setSliderValue}
+              min={0}
+              max={100}
+              suffix="%"
+            />
+          </div>
+        </ComponentStage>
       ),
     },
     {
@@ -485,8 +621,8 @@ function useScreens(darkMode, toggleDarkMode) {
       group: 'Controls', id: 'segmented-tabs',
       label: 'SegmentedControl',
       render: () => (
-        <ComponentStage>
-          <div className="flex flex-col items-center gap-6">
+        <>
+          <ComponentStage>
             <SegmentedControl
               tabs={[
                 { id: 'all', label: 'All' },
@@ -495,9 +631,20 @@ function useScreens(darkMode, toggleDarkMode) {
               ]}
               activeTab={tabDemo}
               onTabChange={setTabDemo}
+              variant={segVariant}
+            />
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
+            <SegmentedControl
+              tabs={[
+                { id: 'default', label: 'Default' },
+                { id: 'subdued', label: 'Subdued' },
+              ]}
+              activeTab={segVariant}
+              onTabChange={setSegVariant}
             />
           </div>
-        </ComponentStage>
+        </>
       ),
     },
     {
@@ -558,6 +705,67 @@ function useScreens(darkMode, toggleDarkMode) {
       ),
     },
     {
+      id: 'image-carousel',
+      label: 'ImageCarousel',
+      render: () => (
+        <>
+          <ComponentStage>
+            <div className="w-[480px]">
+              <ImageCarousel
+                images={[
+                  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=500&fit=crop',
+                  'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=800&h=500&fit=crop',
+                  'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&h=500&fit=crop',
+                  'https://images.unsplash.com/photo-1618172193622-ae2d025f4032?w=800&h=500&fit=crop',
+                ]}
+                height={300}
+                autoHide={carouselAutoHide}
+                controlsPosition={carouselPos}
+              />
+            </div>
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+            <SegmentedControl
+              tabs={[
+                { id: 'top', icon: 'arrow-up' },
+                { id: 'bottom', icon: 'arrow-down' },
+                { id: 'left', icon: 'arrow-left' },
+                { id: 'right', icon: 'arrow-right' },
+              ]}
+              activeTab={carouselPos}
+              onTabChange={setCarouselPos}
+            />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
+              <span className="text-[13px] text-[var(--inv-muted)]">Auto-hide</span>
+              <Toggle checked={carouselAutoHide} onChange={setCarouselAutoHide} size="small" />
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      id: 'card',
+      label: 'Card',
+      render: () => (
+        <>
+          <ComponentStage>
+            <Card
+              image={cardImage ? 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=300&fit=crop' : undefined}
+              title="Project Alpha"
+              description="A next-generation interface for managing autonomous agent workflows."
+              className="w-[300px]"
+            />
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
+              <span className="text-[13px] text-[var(--inv-muted)]">Image</span>
+              <Toggle checked={cardImage} onChange={setCardImage} size="small" />
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
       id: 'spotlight-card',
       label: 'SpotlightCard',
       render: () => (
@@ -589,11 +797,9 @@ function useScreens(darkMode, toggleDarkMode) {
       render: () => (
         <ComponentStage>
           <div className="flex items-center gap-2">
-            <Badge label="Default" />
-            <Badge label="Active" variant="accent" />
-            <Badge label="Online" variant="success" />
-            <Badge label="Pending" variant="warning" />
-            <Badge label="Offline" variant="error" />
+            <Badge label="Active" variant="dark" />
+            <Badge label="Pending" variant="subdued" />
+            <Badge label="v2.1.0" variant="outline" />
           </div>
         </ComponentStage>
       ),
@@ -618,8 +824,75 @@ function useScreens(darkMode, toggleDarkMode) {
       label: 'Toast',
       render: () => <ToastDemo />,
     },
+    {
+      id: 'dialog',
+      label: 'Dialog',
+      render: () => (
+        <>
+          <ComponentStage>
+            <button
+              type="button"
+              onClick={() => setDialogOpen(true)}
+              className="px-4 py-2.5 text-[15px] font-medium rounded-xl bg-[var(--inv-heading)] text-[var(--inv-bg)] cursor-pointer transition-[scale] duration-200 ease-out active:scale-[0.96]"
+            >
+              Open Dialog
+            </button>
+          </ComponentStage>
+          {createPortal(
+            <Dialog
+              isOpen={dialogOpen}
+              onClose={() => setDialogOpen(false)}
+              title="Delete project?"
+              description="This action cannot be undone. All data will be permanently removed."
+              actions={
+                <>
+                  <Button label="Cancel" variant="ghost" onClick={() => setDialogOpen(false)} />
+                  <Button label="Delete" variant="danger" onClick={() => setDialogOpen(false)} />
+                </>
+              }
+            />,
+            document.body
+          )}
+        </>
+      ),
+    },
+    {
+      id: 'modal',
+      label: 'Modal',
+      render: () => (
+        <>
+          <ComponentStage>
+            <button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="px-4 py-2.5 text-[15px] font-medium rounded-xl bg-[var(--inv-heading)] text-[var(--inv-bg)] cursor-pointer transition-[scale] duration-200 ease-out active:scale-[0.96]"
+            >
+              Open Modal
+            </button>
+          </ComponentStage>
+          {createPortal(
+            <Modal
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              title="Settings"
+            >
+              <div className="flex flex-col gap-4">
+                <TextInput label="Display name" placeholder="Your name" />
+                <TextInput label="Email" placeholder="you@example.com" />
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button label="Cancel" variant="ghost" onClick={() => setModalOpen(false)} />
+                  <Button label="Save" variant="primary" onClick={() => setModalOpen(false)} />
+                </div>
+              </div>
+            </Modal>,
+            document.body
+          )}
+        </>
+      ),
+    },
   ]
 }
+
 
 function ToastDemo() {
   const { addToast } = useToast()
@@ -637,15 +910,28 @@ function ToastDemo() {
 }
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(true)
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('inv-dark-mode')
+    const initial = saved !== null ? saved === 'true' : true
+    document.documentElement.setAttribute('data-theme', initial ? 'dark' : 'light')
+    return initial
+  })
   const toggleDarkMode = () => {
     const next = !darkMode
     setDarkMode(next)
+    localStorage.setItem('inv-dark-mode', String(next))
     document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light')
   }
 
   const screens = useScreens(darkMode, toggleDarkMode)
-  const [activeId, setActiveId] = useState(screens[0].id)
+  const [activeId, setActiveId] = useState(() => {
+    const saved = localStorage.getItem('inv-active-component')
+    return screens.find(s => s.id === saved) ? saved : screens[0].id
+  })
+
+  useEffect(() => {
+    localStorage.setItem('inv-active-component', activeId)
+  }, [activeId])
   const [cmdOpen, setCmdOpen] = useState(false)
   const [cmdQuery, setCmdQuery] = useState('')
   const cmdInputRef = useRef(null)
@@ -675,12 +961,37 @@ export default function App() {
     : screens
 
   const active = screens.find(s => s.id === activeId)
+  const [visible, setVisible] = useState(true)
+  const [rendered, setRendered] = useState(activeId)
+  const pendingId = useRef(null)
+
+  const switchTo = useCallback((id) => {
+    if (id === rendered) return
+    pendingId.current = id
+    setVisible(false)
+    setTimeout(() => {
+      setRendered(id)
+      setActiveId(id)
+      requestAnimationFrame(() => setVisible(true))
+    }, 120)
+  }, [rendered])
+
+  const renderedScreen = screens.find(s => s.id === rendered)
 
   return (
     <ToastProvider>
       <div className="min-h-screen bg-[var(--inv-bg)] text-[var(--inv-heading)]">
         <div className="min-h-screen flex items-center justify-center">
-          {active?.render()}
+          <div
+            style={{
+              opacity: visible ? 1 : 0,
+              transition: visible
+                ? 'opacity 0.2s ease-out'
+                : 'opacity 0.1s ease-in',
+            }}
+          >
+            {renderedScreen?.render()}
+          </div>
         </div>
 
         {/* Top bar */}
@@ -690,7 +1001,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => { setCmdOpen(true); setCmdQuery('') }}
-              className="h-9 px-4 flex items-center gap-2 rounded-lg text-[13px] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150 cursor-pointer"
+              className="h-9 px-4 flex items-center gap-2 rounded-lg bg-[var(--inv-bg-alt)] text-[13px] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-[color,background-color] duration-150 cursor-pointer"
             >
               <Icon name="search" size={14} />
               <span className="hidden sm:inline">Search components...</span>
@@ -730,7 +1041,7 @@ export default function App() {
             />
             <div className="fixed top-[15%] left-1/2 z-[81] w-[90vw] max-w-[480px]" style={{ transform: 'translateX(-50%)', animation: 'cmdIn 0.2s cubic-bezier(0.34, 1.3, 0.64, 1)' }}>
               <div className="rounded-2xl bg-[var(--inv-surface)] overflow-hidden" style={{ boxShadow: 'var(--inv-shadow)' }}>
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--inv-border)]">
+                <div className="flex items-center gap-3 px-4 py-3">
                   <Icon name="search" size={18} className="text-[var(--inv-muted)]" />
                   <input
                     ref={cmdInputRef}
@@ -750,7 +1061,7 @@ export default function App() {
                       <button
                         key={s.id}
                         type="button"
-                        onClick={() => { setActiveId(s.id); setCmdOpen(false) }}
+                        onClick={() => { switchTo(s.id); setCmdOpen(false) }}
                         className={`w-full text-left px-4 py-2 text-[15px] flex items-center gap-2 cursor-pointer transition-[background-color] duration-100 hover:bg-[var(--inv-nav-hover-bg)] ${
                           activeId === s.id ? 'text-[var(--inv-accent)] font-medium' : 'text-[var(--inv-heading)]'
                         }`}
@@ -770,7 +1081,7 @@ export default function App() {
           </>
         )}
 
-        <nav className="fixed left-0 top-0 bottom-0 w-52 z-[70] flex flex-col">
+        <nav className="fixed left-0 top-0 bottom-0 w-52 z-[70] flex flex-col bg-[var(--inv-bg-alt)]">
           <div className="px-4 pt-5 pb-3 flex items-center gap-2 flex-shrink-0">
             <Icon name="shrimp" size={18} className="text-[var(--inv-accent)]" />
             <span className="text-[15px] font-semibold text-[var(--inv-heading)]">Invariant</span>
@@ -785,7 +1096,7 @@ export default function App() {
                 )}
                 <button
                   type="button"
-                  onClick={() => setActiveId(s.id)}
+                  onClick={() => switchTo(s.id)}
                   className={`w-full text-left px-2 py-1 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
                     activeId === s.id
                       ? 'text-[var(--inv-heading)] font-medium'
