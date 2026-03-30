@@ -22,7 +22,7 @@ export function Modal({
       />
 
       <div
-        className={`relative w-[90vw] max-w-[560px] max-h-[85vh] rounded-2xl bg-[var(--inv-surface)] flex flex-col overflow-hidden ${className}`}
+        className={`relative w-[90vw] max-w-[560px] max-h-[85vh] rounded-3xl bg-[var(--inv-surface)] flex flex-col overflow-hidden ${className}`}
         style={{
           boxShadow: 'var(--inv-shadow)',
           ...popoverStyle(isOpen, 'center'),

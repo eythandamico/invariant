@@ -7,6 +7,14 @@
     "tokens": ["tokens/theme.css"],
     "peer": ["lucide-react"]
   },
+  "alert": {
+    "file": "components/alert.jsx",
+    "export": "Alert",
+    "doc": "docs/alert.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
   "action-button": {
     "file": "components/action-button.jsx",
     "export": "ActionButton",
@@ -27,6 +35,14 @@
     "file": "components/badge.jsx",
     "export": "Badge",
     "doc": "docs/badge.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "bottom-sheet": {
+    "file": "components/bottom-sheet.jsx",
+    "export": "BottomSheet",
+    "doc": "docs/bottom-sheet.md",
     "deps": [],
     "tokens": ["tokens/theme.css"],
     "peer": []
@@ -83,6 +99,14 @@
     "file": "components/radio-group.jsx",
     "export": "RadioGroup",
     "doc": "docs/radio-group.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "split-pane": {
+    "file": "components/split-pane.jsx",
+    "export": "SplitPane",
+    "doc": "docs/split-pane.md",
     "deps": [],
     "tokens": ["tokens/theme.css"],
     "peer": []
@@ -183,6 +207,14 @@
     "tokens": ["tokens/theme.css"],
     "peer": []
   },
+  "progress": {
+    "file": "components/progress.jsx",
+    "export": "Progress",
+    "doc": "docs/progress.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
   "profile-avatar": {
     "file": "components/profile-avatar.jsx",
     "export": "ProfileAvatar, ProfileAvatarGroup",
@@ -275,6 +307,22 @@
     "file": "components/surface.jsx",
     "export": "Surface",
     "doc": "docs/surface.md",
+    "deps": [],
+    "tokens": ["tokens/theme.css"],
+    "peer": []
+  },
+  "table": {
+    "file": "components/table.jsx",
+    "export": "Table",
+    "doc": "docs/table.md",
+    "deps": ["lib/icon.jsx"],
+    "tokens": ["tokens/theme.css"],
+    "peer": ["lucide-react"]
+  },
+  "tabs": {
+    "file": "components/tabs.jsx",
+    "export": "Tabs",
+    "doc": "docs/tabs.md",
     "deps": [],
     "tokens": ["tokens/theme.css"],
     "peer": []

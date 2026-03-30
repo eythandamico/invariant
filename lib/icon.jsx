@@ -81,6 +81,8 @@ import {
   Paperclip,
   SendHorizontal,
   Minus,
+  Volume2,
+  VolumeOff,
 } from 'lucide-react'
 
 const icons = {
@@ -133,6 +135,8 @@ const icons = {
   'file-text': FileText,
   plus: Plus,
   minus: Minus,
+  volume: Volume2,
+  'volume-off': VolumeOff,
   'thumbs-up': ThumbsUp,
   'thumbs-down': ThumbsDown,
   'external-link': ExternalLink,

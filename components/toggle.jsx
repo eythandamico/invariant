@@ -4,15 +4,17 @@ export function Toggle({ checked = false, onChange, size = 'default', className 
   const isSmall = size === 'small'
   const [pressed, setPressed] = useState(false)
 
-  const trackW = isSmall ? 'w-9' : 'w-11'
-  const trackH = isSmall ? 'h-5' : 'h-7'
-  const pad = isSmall ? 3 : 4
-  const thumbH = isSmall ? 14 : 20
-  const thumbW = pressed ? (isSmall ? 18 : 24) : (isSmall ? 14 : 20)
-  const trackPx = isSmall ? 36 : 44
+  const trackW = isSmall ? 'w-11' : 'w-14'
+  const trackH = isSmall ? 'h-7' : 'h-8'
+  const pad = isSmall ? 4 : 4
+  const thumbH = isSmall ? 20 : 24
+  const thumbW = pressed ? (isSmall ? 24 : 30) : (isSmall ? 20 : 24)
+  const trackPx = isSmall ? 44 : 56
   const travel = trackPx - pad * 2 - (pressed ? thumbW : thumbH)
   const thumbX = checked ? travel : 0
-  const thumbRadius = isSmall ? 'rounded-[4px]' : 'rounded-md'
+  // Concentric radius: inner = outer - padding
+  // Track is rounded-xl (12px), so thumb = 12 - pad
+  const thumbRadius = isSmall ? 'rounded-[8px]' : 'rounded-[8px]'
 
   return (
     <button

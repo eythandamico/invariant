@@ -30,11 +30,18 @@ import { Checkbox } from '../components/checkbox.jsx'
 import { RadioGroup } from '../components/radio-group.jsx'
 import { SliderInput } from '../components/slider-input.jsx'
 import { Card } from '../components/card.jsx'
+import { BottomSheet } from '../components/bottom-sheet.jsx'
 import { ImageCarousel } from '../components/image-carousel.jsx'
+import { SplitPane } from '../components/split-pane.jsx'
+import { Table } from '../components/table.jsx'
+import { Alert } from '../components/alert.jsx'
+import { Tabs } from '../components/tabs.jsx'
+import { Progress } from '../components/progress.jsx'
 import { Dialog } from '../components/dialog.jsx'
 import { Modal } from '../components/modal.jsx'
 import Icon from '../lib/icon.jsx'
 import { TABS, CHAT_TABS, STARTUPS } from './data.jsx'
+import { CodeBlock } from './code-block.jsx'
 
 const PROFILE = { name: 'Eythan D\'Amico', email: 'eythan@invariant.com' }
 const PROFILE_ITEMS = [
@@ -75,7 +82,7 @@ function useScreens(darkMode, toggleDarkMode) {
   const [avatarView, setAvatarView] = useState('single')
   const [toggleOn, setToggleOn] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
-  const [cardImage, setCardImage] = useState(true)
+  const [cardVariant, setCardVariant] = useState('gradient')
   const [carouselAutoHide, setCarouselAutoHide] = useState(false)
   const [carouselPos, setCarouselPos] = useState('bottom')
   const [segVariant, setSegVariant] = useState('subdued')
@@ -90,6 +97,9 @@ function useScreens(darkMode, toggleDarkMode) {
   const [sliderValue, setSliderValue] = useState(40)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [activeTabDemo, setActiveTabDemo] = useState('all')
+  const [progressValue, setProgressValue] = useState(65)
   const [activeTab, setActiveTab] = useState('home')
   const [chatTab, setChatTab] = useState('home')
   const [currentSlug, setCurrentSlug] = useState('acme-ai-labs')
@@ -104,21 +114,95 @@ function useScreens(darkMode, toggleDarkMode) {
 
   return [
     {
+      id: 'welcome',
+      label: 'Quick Start',
+      render: () => (
+        <div className="max-w-xl mx-auto px-8 pt-20 pb-24">
+          <h1 className="text-[36px] font-semibold text-[var(--inv-heading)] leading-tight tracking-tight mb-3">
+            Invariant UI
+          </h1>
+          <p className="text-[16px] text-[var(--inv-muted)] leading-relaxed mb-12">
+            A component library built for AI agents. Give your agent a skill, point it at the repo, and it handles setup, theming, and composition on its own.
+          </p>
+
+          {/* For agents */}
+          <div className="border-t border-[var(--inv-border)] pt-10 mb-10">
+            <h2 className="text-[18px] font-semibold text-[var(--inv-heading)] mb-2">For agents</h2>
+            <p className="text-[14px] text-[var(--inv-muted)] mb-4">
+              Install the skill and your agent knows how to use every component.
+            </p>
+            <CodeBlock code="npx skills add invariant-ui" lang="bash" />
+            <p className="text-[14px] text-[var(--inv-muted)] mt-4">
+              The skill tells the agent where to pull components from, how the file structure works, and how to wire theming into whatever project it's building. No walkthrough needed — the agent reads the skill and gets to work.
+            </p>
+          </div>
+
+          {/* For humans */}
+          <div className="border-t border-[var(--inv-border)] pt-10 mb-10">
+            <h2 className="text-[18px] font-semibold text-[var(--inv-heading)] mb-2">For humans</h2>
+            <p className="text-[14px] text-[var(--inv-muted)] mb-4">
+              If you're wiring things up manually, here's what's in the box.
+            </p>
+            <ol className="text-[14px] text-[var(--inv-muted)] mb-5 list-decimal list-inside flex flex-col gap-1.5">
+              <li>Copy <code className="text-[var(--inv-heading)] font-mono text-[13px]">tokens/theme.css</code> into your project</li>
+              <li>Copy any components you need from <code className="text-[var(--inv-heading)] font-mono text-[13px]">components/</code></li>
+              <li>Import the theme CSS once at the root of your app</li>
+            </ol>
+            <CodeBlock code={`import './tokens/theme.css'
+import { Button } from './components/button'
+
+<Button label="Get started" />`} />
+            <p className="text-[14px] text-[var(--inv-muted)] mt-5 mb-4">
+              Some components use icons. If you're using one that does, install the peer dependency:
+            </p>
+            <CodeBlock code="npm install lucide-react" lang="bash" />
+          </div>
+
+          {/* Theming */}
+          <div className="border-t border-[var(--inv-border)] pt-10 mb-10">
+            <h2 className="text-[18px] font-semibold text-[var(--inv-heading)] mb-2">Theming</h2>
+            <p className="text-[14px] text-[var(--inv-muted)] mb-4">
+              Every color, shadow, and radius comes from <code className="text-[var(--inv-heading)] font-mono text-[13px]">--inv-*</code> CSS variables. Override any variable to customize. Toggle dark mode with a data attribute.
+            </p>
+            <CodeBlock code={`<html data-theme="dark">`} lang="html" />
+          </div>
+
+          {/* Components */}
+          <div className="border-t border-[var(--inv-border)] pt-10 mb-10">
+            <h2 className="text-[18px] font-semibold text-[var(--inv-heading)] mb-2">Components</h2>
+            <p className="text-[14px] text-[var(--inv-muted)] mb-6">
+              50 components across 9 categories. Browse them in the sidebar or press <kbd className="text-[12px] font-mono font-medium text-[var(--inv-muted)] bg-[var(--inv-surface)] px-1.5 py-0.5 rounded-md" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>⌘K</kbd> to search.
+            </p>
+            <div className="grid grid-cols-3 gap-3">
+              {['Navigation', 'Inputs', 'Actions', 'Display', 'Controls', 'Layout', 'Feedback', 'Data', 'Overlays'].map(group => (
+                <div key={group} className="rounded-xl bg-[var(--inv-bg-alt)] px-4 py-3">
+                  <div className="text-[14px] font-medium text-[var(--inv-heading)]">{group}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
       group: 'Navigation', id: 'bottom-nav',
       label: 'BottomNav',
       render: () => (
-        <ComponentStage>
-          <BottomNav
-            tabs={TABS}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            addItems={addItems}
-            darkMode={darkMode}
-            onToggleDarkMode={toggleDarkMode}
-            chatTabId="chat"
-            onSendMessage={(msg) => console.log('Send:', msg)}
-          />
-        </ComponentStage>
+        <>
+          <style>{`nav[aria-label="Navigation"] { left: 50% !important; bottom: 50% !important; transform: translateX(-50%) translateY(50%) !important; }`}</style>
+          <ComponentStage>
+            <BottomNav
+              tabs={TABS}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              addItems={addItems}
+              darkMode={darkMode}
+              onToggleDarkMode={toggleDarkMode}
+              chatTabId="chat"
+              onSendMessage={(msg) => console.log('Send:', msg)}
+            />
+          </ComponentStage>
+        </>
       ),
     },
     {
@@ -179,15 +263,18 @@ function useScreens(darkMode, toggleDarkMode) {
       id: 'chat-nav',
       label: 'ChatNav',
       render: () => (
-        <ComponentStage>
-          <BottomNav
-            tabs={CHAT_TABS}
-            activeTab={chatTab}
-            onTabChange={setChatTab}
-            chatTabId="chat"
-            onSendMessage={(msg) => console.log('Send:', msg)}
-          />
-        </ComponentStage>
+        <>
+          <style>{`nav[aria-label="Navigation"] { left: 50% !important; bottom: 50% !important; transform: translateX(-50%) translateY(50%) !important; }`}</style>
+          <ComponentStage>
+            <BottomNav
+              tabs={CHAT_TABS}
+              activeTab={chatTab}
+              onTabChange={setChatTab}
+              chatTabId="chat"
+              onSendMessage={(msg) => console.log('Send:', msg)}
+            />
+          </ComponentStage>
+        </>
       ),
     },
     {
@@ -240,7 +327,7 @@ function useScreens(darkMode, toggleDarkMode) {
               />
             </div>
           </ComponentStage>
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
             <SegmentedControl
               tabs={[
                 { id: 'default', label: 'Default' },
@@ -388,11 +475,11 @@ function useScreens(darkMode, toggleDarkMode) {
               onTabChange={setBtnIcon}
             />
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
-              <span className="text-[13px] text-[var(--inv-muted)]">Loading</span>
+              <span className="text-[14px] text-[var(--inv-muted)]">Loading</span>
               <Toggle checked={btnLoading} onChange={setBtnLoading} size="small" />
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
-              <span className="text-[13px] text-[var(--inv-muted)]">Disabled</span>
+              <span className="text-[14px] text-[var(--inv-muted)]">Disabled</span>
               <Toggle checked={btnDisabled} onChange={setBtnDisabled} size="small" />
             </div>
           </div>
@@ -446,8 +533,8 @@ function useScreens(darkMode, toggleDarkMode) {
               activeTab={inputState}
               onTabChange={setInputState}
             />
-            <div className="flex items-center gap-2 bg-[var(--inv-surface)] rounded-xl py-[9px] px-3" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
-              <span className="text-[13px] font-medium text-[var(--inv-muted)]">Icon</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
+              <span className="text-[14px] text-[var(--inv-muted)]">Icon</span>
               <Toggle checked={inputIcon} onChange={setInputIcon} />
             </div>
           </div>
@@ -607,7 +694,7 @@ function useScreens(darkMode, toggleDarkMode) {
             </div>
           </ComponentStage>
 
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
             <SegmentedControl
               tabs={AVATAR_STATES.map(s => ({ id: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
               activeTab={avatarState}
@@ -634,7 +721,7 @@ function useScreens(darkMode, toggleDarkMode) {
               variant={segVariant}
             />
           </ComponentStage>
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
             <SegmentedControl
               tabs={[
                 { id: 'default', label: 'Default' },
@@ -675,11 +762,11 @@ function useScreens(darkMode, toggleDarkMode) {
             <StepIndicator steps={5} activeStep={activeStep} onStepChange={setActiveStep} />
           </ComponentStage>
 
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex gap-2">
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
             <button
               type="button"
               onClick={() => setActiveStep(s => Math.max(0, s - 1))}
-              className="px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-colors duration-150 cursor-pointer"
+              className="px-3 py-1.5 text-[14px] font-medium rounded-xl bg-[var(--inv-surface)] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-colors duration-150 cursor-pointer"
               style={{ boxShadow: 'var(--inv-shadow-sm)' }}
             >
               Back
@@ -687,7 +774,7 @@ function useScreens(darkMode, toggleDarkMode) {
             <button
               type="button"
               onClick={() => setActiveStep(s => Math.min(4, s + 1))}
-              className="px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[var(--inv-accent)] text-white transition-colors duration-150 cursor-pointer"
+              className="px-3 py-1.5 text-[14px] font-medium rounded-xl bg-[var(--inv-accent)] text-[var(--inv-bg)] transition-colors duration-150 cursor-pointer"
             >
               Next
             </button>
@@ -701,6 +788,34 @@ function useScreens(darkMode, toggleDarkMode) {
       render: () => (
         <ComponentStage>
           <ActionButton label="Save" icon="check" />
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'split-pane',
+      label: 'SplitPane',
+      render: () => (
+        <ComponentStage>
+          <SplitPane
+            height={360}
+            className="w-[560px]"
+            left={
+              <div className="h-full flex items-center justify-center p-6">
+                <div className="text-center">
+                  <div className="text-[var(--inv-text-lg)] font-semibold text-[var(--inv-heading)] mb-1">Editor</div>
+                  <div className="text-[var(--inv-text-sm)] text-[var(--inv-muted)]">Drag the divider</div>
+                </div>
+              </div>
+            }
+            right={
+              <div className="h-full flex items-center justify-center p-6">
+                <div className="text-center">
+                  <div className="text-[var(--inv-text-lg)] font-semibold text-[var(--inv-heading)] mb-1">Preview</div>
+                  <div className="text-[var(--inv-text-sm)] text-[var(--inv-muted)]">Resizable panes</div>
+                </div>
+              </div>
+            }
+          />
         </ComponentStage>
       ),
     },
@@ -736,7 +851,7 @@ function useScreens(darkMode, toggleDarkMode) {
               onTabChange={setCarouselPos}
             />
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
-              <span className="text-[13px] text-[var(--inv-muted)]">Auto-hide</span>
+              <span className="text-[14px] text-[var(--inv-muted)]">Auto-hide</span>
               <Toggle checked={carouselAutoHide} onChange={setCarouselAutoHide} size="small" />
             </div>
           </div>
@@ -750,17 +865,24 @@ function useScreens(darkMode, toggleDarkMode) {
         <>
           <ComponentStage>
             <Card
-              image={cardImage ? 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=300&fit=crop' : undefined}
+              variant={cardVariant}
+              gradientSeed={cardVariant === 'gradient' ? 'Project Alpha' : undefined}
+              image={cardVariant === 'video' ? '/card-video.mp4' : undefined}
               title="Project Alpha"
               description="A next-generation interface for managing autonomous agent workflows."
-              className="w-[300px]"
+              className="w-[340px]"
             />
           </ComponentStage>
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--inv-surface)]" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>
-              <span className="text-[13px] text-[var(--inv-muted)]">Image</span>
-              <Toggle checked={cardImage} onChange={setCardImage} size="small" />
-            </div>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+            <SegmentedControl
+              tabs={[
+                { id: 'gradient', label: 'Gradient' },
+                { id: 'subdued', label: 'Subdued' },
+                { id: 'video', label: 'Video' },
+              ]}
+              activeTab={cardVariant}
+              onTabChange={setCardVariant}
+            />
           </div>
         </>
       ),
@@ -773,7 +895,7 @@ function useScreens(darkMode, toggleDarkMode) {
           <SpotlightCard className="w-[280px]">
             <div className="p-5">
               <div className="text-[15px] font-medium text-[var(--inv-heading)] mb-1">Analytics</div>
-              <div className="text-[13px] text-[var(--inv-muted)]">Track performance metrics and user engagement in real time.</div>
+              <div className="text-[14px] text-[var(--inv-muted)]">Track performance metrics and user engagement in real time.</div>
             </div>
           </SpotlightCard>
         </ComponentStage>
@@ -809,7 +931,7 @@ function useScreens(darkMode, toggleDarkMode) {
       label: 'Accordion',
       render: () => (
         <ComponentStage>
-          <div className="w-[400px]">
+          <div className="w-[340px]">
             <Accordion items={[
               { title: 'What is this?', content: 'A component library for building agent-powered interfaces with copy-paste components and CSS variable theming.' },
               { title: 'How do I install it?', content: 'Clone the repo, copy the components you need, install lucide-react, and import the theme CSS.' },
@@ -890,6 +1012,113 @@ function useScreens(darkMode, toggleDarkMode) {
         </>
       ),
     },
+    {
+      group: 'Data', id: 'table',
+      label: 'Table',
+      render: () => (
+        <ComponentStage>
+          <Table
+            className="w-[600px]"
+            columns={[
+              { key: 'agent', label: 'Agent' },
+              { key: 'status', label: 'Status' },
+              { key: 'tasks', label: 'Tasks', align: 'right' },
+              { key: 'uptime', label: 'Uptime', align: 'right' },
+            ]}
+            data={[
+              { agent: 'Scout', status: 'Active', tasks: 142, uptime: '99.8%' },
+              { agent: 'Forge', status: 'Active', tasks: 89, uptime: '99.2%' },
+              { agent: 'Relay', status: 'Idle', tasks: 67, uptime: '98.5%' },
+              { agent: 'Cipher', status: 'Active', tasks: 203, uptime: '99.9%' },
+              { agent: 'Beacon', status: 'Paused', tasks: 31, uptime: '97.1%' },
+              { agent: 'Nova', status: 'Active', tasks: 118, uptime: '99.4%' },
+            ]}
+          />
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'tabs',
+      label: 'Tabs',
+      render: () => (
+        <ComponentStage>
+          <Tabs
+            tabs={[
+              { id: 'all', label: 'All', count: 24 },
+              { id: 'active', label: 'Active', count: 12 },
+              { id: 'archived', label: 'Archived', count: 3 },
+            ]}
+            activeTab={activeTabDemo}
+            onTabChange={setActiveTabDemo}
+          />
+        </ComponentStage>
+      ),
+    },
+    {
+      id: 'progress',
+      label: 'Progress',
+      render: () => (
+        <>
+          <ComponentStage>
+            <div className="w-[360px] flex flex-col gap-6">
+              <Progress value={progressValue} label="Upload" showValue />
+              <Progress value={progressValue} size="small" />
+              <Progress value={100} label="Complete" size="large" />
+            </div>
+          </ComponentStage>
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3">
+            <div className="w-[200px]">
+              <SliderInput
+                label="Value"
+                value={progressValue}
+                onChange={setProgressValue}
+                min={0}
+                max={100}
+                suffix="%"
+              />
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      id: 'alert',
+      label: 'Alert',
+      render: () => (
+        <ComponentStage>
+          <div className="w-[420px] flex flex-col gap-3">
+            <Alert variant="info" title="New update available" description="Version 2.1 includes performance improvements and bug fixes." dismissible />
+            <Alert variant="success" title="Deployment complete" description="Your changes are now live." />
+            <Alert variant="warning" title="Rate limit" description="You're approaching your API quota." />
+            <Alert variant="error" title="Build failed" description="Check the logs for details." dismissible />
+          </div>
+        </ComponentStage>
+      ),
+    },
+    {
+      group: 'Overlays', id: 'bottom-sheet',
+      label: 'BottomSheet',
+      render: () => {
+        return (
+          <>
+            <button
+              type="button"
+              onClick={() => setSheetOpen(true)}
+              className="px-4 py-2.5 text-[15px] font-medium rounded-xl bg-[var(--inv-heading)] text-[var(--inv-bg)] cursor-pointer transition-[scale] duration-200 ease-out active:scale-[0.96]"
+            >
+              Open Bottom Sheet
+            </button>
+            {createPortal(
+              <BottomSheet
+                isOpen={sheetOpen}
+                onClose={() => setSheetOpen(false)}
+              />,
+              document.body
+            )}
+          </>
+        )
+      },
+    },
   ]
 }
 
@@ -926,7 +1155,7 @@ export default function App() {
   const screens = useScreens(darkMode, toggleDarkMode)
   const [activeId, setActiveId] = useState(() => {
     const saved = localStorage.getItem('inv-active-component')
-    return screens.find(s => s.id === saved) ? saved : screens[0].id
+    return screens.find(s => s.id === saved) ? saved : 'welcome'
   })
 
   useEffect(() => {
@@ -935,6 +1164,16 @@ export default function App() {
   const [cmdOpen, setCmdOpen] = useState(false)
   const [cmdQuery, setCmdQuery] = useState('')
   const cmdInputRef = useRef(null)
+  const navListRef = useRef(null)
+  const [navScrolledTop, setNavScrolledTop] = useState(true)
+
+  useEffect(() => {
+    const el = navListRef.current
+    if (!el) return
+    const onScroll = () => setNavScrolledTop(el.scrollTop < 10)
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => el.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => { document.title = 'Components — Invariant UI' }, [])
 
@@ -995,27 +1234,54 @@ export default function App() {
         </div>
 
         {/* Top bar */}
-        <header className="fixed top-0 left-52 right-0 z-[70] h-14 px-5 flex items-center justify-between">
-          {/* Center — search trigger (viewport centered) */}
-          <div className="fixed left-1/2 top-0 h-14 -translate-x-1/2 flex items-center z-[70]">
+        <header className="fixed top-0 left-0 right-0 z-[70] h-14 px-16 flex items-center justify-between border-b border-[var(--inv-border)]">
+          {/* Left — shrimp + breadcrumbs */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <button type="button" onClick={() => switchTo('welcome')} className="cursor-pointer hover:scale-110 transition-transform duration-150">
+              <Icon name="shrimp" size={20} className="text-[var(--inv-accent)]" />
+            </button>
+            {(() => {
+              if (activeId === 'welcome') {
+                return <span className="text-[14px] font-medium text-[var(--inv-heading)]">Invariant UI</span>
+              }
+              const current = screens.find(s => s.id === activeId)
+              const group = current?.group || screens.slice(0, screens.indexOf(current)).reverse().find(s => s.group)?.group
+              return (
+                <div className="flex items-center gap-1.5 text-[14px] text-[var(--inv-muted)]">
+                  <span>Components</span>
+                  {group && (
+                    <>
+                      <span className="opacity-30">/</span>
+                      <span>{group}</span>
+                    </>
+                  )}
+                  <span className="opacity-30">/</span>
+                  <span className="text-[var(--inv-heading)] font-medium">{current?.label}</span>
+                </div>
+              )
+            })()}
+          </div>
+
+          {/* Center — search trigger */}
+          <div className="flex items-center">
             <button
               type="button"
               onClick={() => { setCmdOpen(true); setCmdQuery('') }}
-              className="h-9 px-4 flex items-center gap-2 rounded-lg bg-[var(--inv-bg-alt)] text-[13px] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-[color,background-color] duration-150 cursor-pointer"
+              className="h-9 w-[320px] px-4 flex items-center gap-2 rounded-xl bg-[var(--inv-bg-alt)] text-[14px] text-[var(--inv-muted)] hover:text-[var(--inv-heading)] transition-[color,background-color] duration-150 cursor-pointer"
             >
               <Icon name="search" size={14} />
-              <span className="hidden sm:inline">Search components...</span>
-              <kbd className="hidden sm:inline text-[11px] font-mono font-medium text-[var(--inv-muted)]">⌘K</kbd>
+              <span className="hidden sm:inline flex-1 text-left">Search components...</span>
+              <kbd className="hidden sm:inline text-[12px] font-mono font-medium text-[var(--inv-muted)] bg-[var(--inv-surface)] px-1.5 py-0.5 rounded-md" style={{ boxShadow: 'var(--inv-shadow-sm)' }}>⌘K</kbd>
             </button>
           </div>
 
           {/* Right — GitHub + dark mode */}
-          <div className="ml-auto flex items-center gap-1">
+          <div className="flex items-center justify-end gap-1 w-52 flex-shrink-0">
             <a
               href="https://github.com/eythandamico/invariant"
               target="_blank"
               rel="noopener noreferrer"
-              className="h-9 px-2 flex items-center gap-1.5 rounded-lg text-[13px] font-medium text-[var(--inv-body)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150"
+              className="h-9 px-2 flex items-center gap-1.5 rounded-xl text-[14px] font-medium text-[var(--inv-body)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150"
             >
               <Icon name="github" size={16} />
               <span className="hidden sm:inline">GitHub</span>
@@ -1023,7 +1289,7 @@ export default function App() {
             <button
               type="button"
               onClick={toggleDarkMode}
-              className="w-9 h-9 flex items-center justify-center rounded-lg text-[var(--inv-body)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150 cursor-pointer"
+              className="w-9 h-9 flex items-center justify-center rounded-xl text-[var(--inv-body)] hover:text-[var(--inv-heading)] hover:bg-[var(--inv-nav-hover-bg)] transition-[color,background-color] duration-150 cursor-pointer"
               aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               <Icon name={darkMode ? 'sun' : 'moon'} size={16} />
@@ -1042,32 +1308,32 @@ export default function App() {
             <div className="fixed top-[15%] left-1/2 z-[81] w-[90vw] max-w-[480px]" style={{ transform: 'translateX(-50%)', animation: 'cmdIn 0.2s cubic-bezier(0.34, 1.3, 0.64, 1)' }}>
               <div className="rounded-2xl bg-[var(--inv-surface)] overflow-hidden" style={{ boxShadow: 'var(--inv-shadow)' }}>
                 <div className="flex items-center gap-3 px-4 py-3">
-                  <Icon name="search" size={18} className="text-[var(--inv-muted)]" />
+                  <Icon name="search" size={20} className="text-[var(--inv-muted)]" />
                   <input
                     ref={cmdInputRef}
                     type="text"
                     value={cmdQuery}
                     onChange={(e) => setCmdQuery(e.target.value)}
                     placeholder="Search components..."
-                    className="flex-1 bg-transparent text-[15px] text-[var(--inv-heading)] placeholder-[var(--inv-muted)] outline-none"
+                    className="flex-1 bg-transparent text-[16px] text-[var(--inv-heading)] placeholder-[var(--inv-muted)] outline-none"
                   />
-                  <kbd className="text-[11px] font-mono font-medium text-[var(--inv-muted)]">ESC</kbd>
+                  <kbd className="text-[12px] font-mono font-medium text-[var(--inv-muted)] bg-[var(--inv-bg-alt)] px-1.5 py-0.5 rounded-md">ESC</kbd>
                 </div>
-                <div className="max-h-[320px] overflow-y-auto py-2">
+                <div className="max-h-[360px] overflow-y-auto py-2">
                   {cmdResults.length === 0 ? (
-                    <div className="px-4 py-6 text-center text-[13px] text-[var(--inv-muted)]">No components found</div>
+                    <div className="px-5 py-8 text-center text-[15px] text-[var(--inv-muted)]">No components found</div>
                   ) : (
                     cmdResults.map(s => (
                       <button
                         key={s.id}
                         type="button"
                         onClick={() => { switchTo(s.id); setCmdOpen(false) }}
-                        className={`w-full text-left px-4 py-2 text-[15px] flex items-center gap-2 cursor-pointer transition-[background-color] duration-100 hover:bg-[var(--inv-nav-hover-bg)] ${
+                        className={`w-full text-left px-5 py-2.5 text-[16px] flex items-center gap-2 cursor-pointer transition-[background-color] duration-100 hover:bg-[var(--inv-nav-hover-bg)] ${
                           activeId === s.id ? 'text-[var(--inv-accent)] font-medium' : 'text-[var(--inv-heading)]'
                         }`}
                       >
                         {s.label}
-                        {s.group && <span className="text-[11px] text-[var(--inv-muted)] ml-auto">{s.group}</span>}
+                        {s.group && <span className="text-[12px] text-[var(--inv-muted)] ml-auto">{s.group}</span>}
                       </button>
                     ))
                   )}
@@ -1081,33 +1347,34 @@ export default function App() {
           </>
         )}
 
-        <nav className="fixed left-0 top-0 bottom-0 w-52 z-[70] flex flex-col bg-[var(--inv-bg-alt)]">
-          <div className="px-4 pt-5 pb-3 flex items-center gap-2 flex-shrink-0">
-            <Icon name="shrimp" size={18} className="text-[var(--inv-accent)]" />
-            <span className="text-[15px] font-semibold text-[var(--inv-heading)]">Invariant</span>
-          </div>
-          <div className="flex-1 overflow-y-auto px-4 pb-6 flex flex-col justify-center gap-0.5" style={{ scrollbarWidth: 'none' }}>
-            {screens.map((s, i) => (
-              <div key={s.id}>
-                {s.group && (
-                  <div className={`px-2 pt-3 pb-1 text-[11px] uppercase tracking-wider text-[var(--inv-muted)] opacity-50 ${i > 0 ? 'mt-1' : ''}`}>
-                    {s.group}
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => switchTo(s.id)}
-                  className={`w-full text-left px-2 py-1 text-[13px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
-                    activeId === s.id
-                      ? 'text-[var(--inv-heading)] font-medium'
-                      : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
-                  }`}
-                >
-                  {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
-                  {s.label}
-                </button>
-              </div>
-            ))}
+        <nav className="fixed left-0 top-0 bottom-0 w-64 z-[70] flex flex-col">
+          <div className="h-14 flex-shrink-0" />
+          <div className="flex-1 relative">
+            <div ref={navListRef} className="absolute inset-0 overflow-y-auto px-16 pb-40 pt-24 flex flex-col gap-2" style={{ scrollbarWidth: 'none' }}>
+              {screens.map((s, i) => (
+                <div key={s.id}>
+                  {s.group && (
+                    <div className={`px-2 pt-4 pb-1 text-[12px] uppercase tracking-wider text-[var(--inv-muted)] opacity-50 ${i > 0 ? 'mt-2' : ''}`}>
+                      {s.group}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => switchTo(s.id)}
+                    className={`w-full text-left px-2 py-1.5 text-[15px] rounded-lg transition-colors duration-150 cursor-pointer flex items-center ${
+                      activeId === s.id
+                        ? 'text-[var(--inv-heading)] font-medium'
+                        : 'text-[var(--inv-muted)] hover:text-[var(--inv-heading)]'
+                    }`}
+                  >
+                    {activeId === s.id && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--inv-accent)] mr-2" />}
+                    {s.label}
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="absolute top-0 left-0 right-0 h-20 pointer-events-none transition-opacity duration-200" style={{ opacity: navScrolledTop ? 0 : 1, background: 'linear-gradient(to bottom, var(--inv-bg), transparent)', backdropFilter: 'blur(6px)', maskImage: 'linear-gradient(to bottom, black, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)' }} />
+            <div className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none" style={{ background: 'linear-gradient(to top, var(--inv-bg) 20%, transparent)', backdropFilter: 'blur(6px)', maskImage: 'linear-gradient(to top, black, transparent)', WebkitMaskImage: 'linear-gradient(to top, black, transparent)' }} />
           </div>
         </nav>
       </div>

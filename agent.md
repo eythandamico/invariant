@@ -60,6 +60,7 @@ Get the SearchBar component working in 3 steps:
 | ActionButton | `components/action-button.jsx` | `docs/action-button.md` | `lib/icon.jsx` |
 | AgentAvatar | `components/agent-avatar.jsx` | `docs/agent-avatar.md` | `lib/popover.js` |
 | Card | `components/card.jsx` | `docs/card.md` | — |
+| BottomSheet | `components/bottom-sheet.jsx` | `docs/bottom-sheet.md` | — |
 | Badge | `components/badge.jsx` | `docs/badge.md` | — |
 | Dialog | `components/dialog.jsx` | `docs/dialog.md` | `lib/popover.js`, `lib/use-click-outside.js` |
 | BottomNav | `components/bottom-nav.jsx` | `docs/bottom-nav.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js`, `lib/use-is-mobile.js` |
@@ -67,7 +68,9 @@ Get the SearchBar component working in 3 steps:
 | Checkbox | `components/checkbox.jsx` | `docs/checkbox.md` | `lib/icon.jsx` |
 | Dropdown | `components/dropdown.jsx` | `docs/dropdown.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
 | ExpandCard | `components/expand-card.jsx` | `docs/expand-card.md` | `lib/icon.jsx` |
+| Progress | `components/progress.jsx` | `docs/progress.md` | — |
 | PinInput | `components/pin-input.jsx` | `docs/pin-input.md` | — |
+| Alert | `components/alert.jsx` | `docs/alert.md` | `lib/icon.jsx` |
 | Overlay | `components/overlay.jsx` | `docs/overlay.md` | — |
 | NumberInput | `components/number-input.jsx` | `docs/number-input.md` | `lib/icon.jsx` |
 | Modal | `components/modal.jsx` | `docs/modal.md` | `lib/icon.jsx`, `lib/popover.js`, `lib/use-click-outside.js` |
@@ -91,6 +94,9 @@ Get the SearchBar component working in 3 steps:
 | ImageCarousel | `components/image-carousel.jsx` | `docs/image-carousel.md` | `lib/icon.jsx`, `components/step-indicator.jsx` |
 | IconButton | `components/icon-button.jsx` | `docs/icon-button.md` | `lib/icon.jsx` |
 | Menu, MenuItem, MenuDivider | `components/menu.jsx` | `docs/menu.md` | `lib/icon.jsx`, `lib/popover.js` |
+| Table | `components/table.jsx` | `docs/table.md` | `lib/icon.jsx` |
+| Tabs | `components/tabs.jsx` | `docs/tabs.md` | — |
+| SplitPane | `components/split-pane.jsx` | `docs/split-pane.md` | — |
 | SliderInput | `components/slider-input.jsx` | `docs/slider-input.md` | — |
 | Skeleton | `components/skeleton.jsx` | `docs/skeleton.md` | — |
 | Textarea | `components/textarea.jsx` | `docs/textarea.md` | — |

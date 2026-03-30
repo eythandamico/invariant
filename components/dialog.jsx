@@ -22,7 +22,7 @@ export function Dialog({
       />
 
       <div
-        className={`relative w-[90vw] max-w-[400px] rounded-2xl bg-[var(--inv-surface)] p-6 ${className}`}
+        className={`relative w-[90vw] max-w-[400px] rounded-3xl bg-[var(--inv-surface)] p-6 ${className}`}
         style={{
           boxShadow: 'var(--inv-shadow)',
           ...popoverStyle(isOpen, 'center'),
